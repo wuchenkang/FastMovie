@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}简博-验证邮箱{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>
+        你好，{{ current_user.username }}！
+    </h1>
+</div>
+<div class="col-md-12">
+    <h3>欢迎来到简博！</h3>
+    <p>
+        您还没有验证您的邮箱。
+        为了正常访问博客内容，请验证您的邮箱。
+        一封用于验证邮箱的邮件已被发送至您的邮箱，请尽快进行验证。验证链接将在1小时后失效。
+    </p>
+    <p>
+        未接收到验证邮件？
+        <a href="{{ url_for('auth.resend_confirmation') }}">再次发送验证邮件</a>
+    </p>
+</div>
+{% endblock %}
