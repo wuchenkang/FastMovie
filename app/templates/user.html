@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Simple Blog - {{ user.username }}{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>{{ user.username }}</h1>
+</div>
+<div class="col-md-12">
+    {% if user.name or user.location %}
+    <p>
+        {% if user.name %}
+            {{ user.name }}
+        {% endif %}
+        {% if user.location %}
+            from <a href="https://map.baidu.com/?q={{ user.location }}">{{ user.location }}</a>
+        {% endif %}
+    </p>
+    {% endif %}
+    {% if current_user.is_administrator() %}
+    <p><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
+    {% endif %}
+    {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+    <p>Register at: {{ moment(user.member_since).format('L') }}.</p>
+    <p>Last login: {{ moment(user.last_seen).fromNow() }}.</p>
+</div>
+{% endblock %}
