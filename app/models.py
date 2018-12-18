@@ -2,7 +2,7 @@ from datetime import datetime
 import hashlib
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from flask import current_app, request
+from flask import current_app
 from flask_login import UserMixin, AnonymousUserMixin
 from . import db, login_manager
 
@@ -197,8 +197,8 @@ class Movie(db.Model):
     __tablename__ = 'movies'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
-    date = db.Column(db.DateTime())
-    prize = db.Column(db.Float, default=0.0)
+    date = db.Column(db.Date)
+    price = db.Column(db.Float, default=0.0)
     picture = db.Column(db.LargeBinary)
     director = db.Column(db.String(64))
     description = db.Column(db.Text)
