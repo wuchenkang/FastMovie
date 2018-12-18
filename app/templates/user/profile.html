@@ -1,9 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}简博-{{ user.username }}{% endblock %}
+{% block title %}个人资料{{ user.username }}{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
+    <h1>个人资料</h1>
+</div>
+<div class="col-md-8">
     <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=256) }}">
     <div class="profile-header">
         <h1>{{ user.username }}</h1>
@@ -11,14 +14,17 @@
         <p>
             {% if user.name %}姓名：{{ user.name }}<br>{% endif %}
             {% if user.location %}
-                所在地： <a href="http://maps.google.com/?q={{ user.location }}">{{ user.location }}</a><br>
+                所在地： <a href="http://maps.baidu.com/?q={{ user.location }}">{{ user.location }}</a><br>
             {% endif %}
         </p>
         {% endif %}
         {% if current_user.is_administrator() %}
         <p><a href="mailto:{{ user.email }}">邮箱：{{ user.email }}</a></p>
         {% endif %}
-        {% if user.about_me %}个性签名<p>{{ user.about_me }}</p>{% endif %}
+        {% if user.about_me %}
+        个性签名
+            <p><textarea class="text-info">{{ user.about_me }}</textarea></p>
+        {% endif %}
         <p>注册时间：{{ moment(user.member_since).format('L') }}</p>
         <p>上次登陆：{{ moment(user.last_seen).fromNow() }}.</p>
         <p>

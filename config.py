@@ -10,9 +10,9 @@ class Config:
         ['true', 'on', '1']
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    BLOG_MAIL_SUBJECT_PREFIX = '[简博 - Simple Blog]'
-    BLOG_MAIL_SENDER = 'Simple Blog Team <%s>' % MAIL_USERNAME
-    BLOG_ADMIN = os.environ.get('BLOG_ADMIN')
+    MAIL_SUBJECT_PREFIX = '[迅影]'
+    MAIL_SENDER = 'Fast Movie Team <%s>' % MAIL_USERNAME
+    ADMIN = os.environ.get('ADMIN')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     @staticmethod
