@@ -193,6 +193,16 @@ class AnonymousUser(AnonymousUserMixin):
 
 login_manager.anonymous_user = AnonymousUser
 
+class Movie(db.Model):
+    __tablename__ = 'movies'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+    date = db.Column(db.DateTime())
+    prize = db.Column(db.Float, default=0.0)
+    picture = db.Column(db.LargeBinary)
+    director = db.Column(db.String(64))
+    description = db.Column(db.Text)
+
 
 @login_manager.user_loader
 def load_user(user_id):
