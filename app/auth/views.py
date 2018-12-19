@@ -152,7 +152,7 @@ def change_email_request():
             flash('用于确认邮箱的邮件已发送至您的邮箱！')
             return redirect(url_for('main.index'))
         else:
-            flash('Invalid email or password.')
+            flash('无效邮箱或密码！')
     return render_template("auth/change_email.html", form=form)
 
 

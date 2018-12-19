@@ -191,7 +191,6 @@ class AnonymousUser(AnonymousUserMixin):
     def is_administrator(self):
         return False
 
-login_manager.anonymous_user = AnonymousUser
 
 class Movie(db.Model):
     __tablename__ = 'movies'
@@ -200,8 +199,11 @@ class Movie(db.Model):
     date = db.Column(db.Date)
     price = db.Column(db.Float, default=0.0)
     picture = db.Column(db.LargeBinary)
-    director = db.Column(db.String(64))
-    description = db.Column(db.Text)
+    director = db.Column(db.String(64), default='未知')
+    description = db.Column(db.Text, default='暂无。')
+
+
+login_manager.anonymous_user = AnonymousUser
 
 
 @login_manager.user_loader
