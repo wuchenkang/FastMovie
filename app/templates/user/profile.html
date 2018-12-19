@@ -12,16 +12,13 @@
         <h1>{{ user.username }}</h1>
         {% if user.name or user.location %}
             {% if user.name %}<p>姓名：{{ user.name }}</p>{% endif %}
-            {% if user.location %}<p>所在地：{{ user.location }}</p>
+            {% if user.location %}<p>所在地：<a href="http://maps.baidu.com/?q={{ user.location }}">{{ user.location }}</a></p>
             {% endif %}
         {% endif %}
-        {% if current_user.is_administrator() %}
-        <p><a href="mailto:{{ user.email }}">邮箱：{{ user.email }}</a></p>
+        {% if current_user.is_administrator() and not user == current_user %}
+        <p>邮箱：<a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
         {% else %}
         <p>邮箱：{{ user.email }}</p>
-        {% endif %}
-        {% if current_user.is_administrator() %}
-        <p><a href="mailto:{{ user.email }}">邮箱：{{ user.email }}</a></p>
         {% endif %}
         {% if user.about_me %}
         个性签名
@@ -32,9 +29,10 @@
         <p>
             {% if user == current_user %}
             <a class="btn btn-default" href="{{ url_for('.edit_profile') }}">编辑个人资料</a>
-            {% endif %}
-            {% if current_user.is_administrator() %}
-            <a class="btn btn-danger" href="{{ url_for('.edit_profile_admin', id=user.id) }}">修改个人资料[管理员]</a>
+            {% else %}
+                {% if current_user.is_administrator() %}
+                <a class="btn btn-danger" href="{{ url_for('.edit_profile_admin', id=user.id) }}">编辑个人资料[管理员]</a>
+                {% endif %}
             {% endif %}
         </p>
     </div>

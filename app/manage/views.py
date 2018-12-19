@@ -5,6 +5,7 @@ from .forms import EditMovieForm
 from .. import db
 from ..decorators import admin_required
 from ..models import Movie
+import base64
 
 
 @manage.route('/edit-movie/<int:id>', methods=['GET', 'POST'])
@@ -17,7 +18,7 @@ def edit_movie(id):
         movie.name = form.name.data
         movie.date = form.date.data
         movie.price = form.price.data
-        if request.files['picture'] is not None:
+        if form.picture.data:
             movie.picture = request.files['picture'].read()
         movie.director = form.director.data
         movie.description = form.description.data
@@ -30,4 +31,11 @@ def edit_movie(id):
     form.price.data = movie.price
     form.director.data = movie.director
     form.description.data = movie.description
-    return render_template('manage/edit_movie.html', form=form, movie=movie)
+    return render_template('manage/edit_movie.html', form=form, movie=movie, base64=base64)
+
+
+# @manage.route('/create-movie/<string:name>', methods=['GET', 'POST'])
+# @login_required
+# @admin_required
+# def create_movie(name):
+#

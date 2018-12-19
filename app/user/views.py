@@ -24,7 +24,7 @@ def edit_profile():
         db.session.add(current_user._get_current_object())
         db.session.commit()
         flash('个人资料已更新!')
-        return redirect(url_for('.', username=current_user.username))
+        return redirect(url_for('.profile', username=current_user.username))
     form.name.data = current_user.name
     form.location.data = current_user.location
     form.about_me.data = current_user.about_me
