@@ -13,6 +13,16 @@ class EditMovieForm(FlaskForm):
     description = TextAreaField('简介')
     submit = SubmitField('提交')
 
+    def __init__(self, movie, *args, **kwargs):
+        super(EditMovieForm, self).__init__(*args, **kwargs)
+        self.movie = movie
+
+    def validate_name(self, field):
+        if field.data != self.movie.name and \
+                Movie.query.filter_by(name=field.data).first():
+            raise ValidationError('该电影名称已被使用！')
+
+
 
 class CreateMovieForm(FlaskForm):
     name = StringField('名称', validators=[DataRequired()])
@@ -26,4 +36,3 @@ class CreateMovieForm(FlaskForm):
     def validate_name(self, field):
         if Movie.query.filter_by(name=field.data).first():
             raise ValidationError('该电影名称已被使用！')
-
