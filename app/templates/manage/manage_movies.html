@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}管理电影资料{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>管理电影资料</h1>
+</div>
+<div class="col-md-8">
+    <table class="table">
+        <tr>
+            <td>名称</td>
+            <td>上映日期</td>
+            <td>价格</td>
+            <td>导演</td>
+            <td>简介</td>
+            <td>编辑</td>
+        </tr>
+        {% for movie in movies %}
+                <tr>
+                    <td>{{ movie.name }}</td>
+                    <td>{{ movie.date }}</td>
+                    <td>{{ movie.price }}</td>
+                    <td>{{ movie.director }}</td>
+                    <td>
+                        {% if len(movie.description) < 32 %}
+                            {{ movie.description }}
+                        {% else %}
+                            {{ movie.description[:30] }}...
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for("manage.edit_movie", id=movie.id) }}">编辑</a>
+                    </td>
+                </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

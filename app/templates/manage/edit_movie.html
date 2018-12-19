@@ -9,9 +9,9 @@
 </div>
 <div class="col-md-4">
     {% if movie.picture %}
-    <img class="img-rounded" src="data:;base64,{{ base64.b64encode(movie.picture).decode('ascii') }}"/>
+    <img class="img-rounded" src="data:;base64,{{ base64.b64encode(movie.picture).decode('ascii') }}" width="100%"/>
     {% else %}
-    <img class="img-rounded" src="{{ url_for('static', filename='movie.png') }}"/>
+    <img class="img-rounded" src="{{ url_for('static', filename='movie.png') }}" width="100%"/>
     {% endif %}
 </div>
 <div class="col-md-4">

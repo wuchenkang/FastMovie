@@ -13,6 +13,7 @@ class EditMovieForm(FlaskForm):
     director = StringField('导演')
     description = TextAreaField('简介')
     submit = SubmitField('提交')
+    delete = SubmitField('删除')
 
     def __init__(self, movie, *args, **kwargs):
         super(EditMovieForm, self).__init__(*args, **kwargs)
