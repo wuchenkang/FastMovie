@@ -11,23 +11,21 @@
     <h1>热映电影</h1>
 </div>
 
-{% for i in range(movies|length) %}
-    {% if i % 4 == 0 %}
-        <div class="row">
-    {% endif %}
-    <div class="col-md-3">
-        <a href="{{ url_for("subject.movie", id=movies[i].id) }}">
-            {% if movies[i].picture %}
-            <img class="img-rounded" src="data:;base64,{{ base64.b64encode(movies[i].picture).decode('ascii') }}" width="100%"/>
-            {% else %}
-            <img class="img-rounded" src="{{ url_for('static', filename='movie.png') }}" width="100%"/>
-            {% endif %}
-        </a>
-        导演：{{ movies[i].director }}<br/>
-        价格：￥{{ movies[i].price }}
+{% for row in movies|batch(4) %}
+    <div class="row">
+        {% for movie in row %}
+            <div class="col-md-3">
+                <a href="{{ url_for("subject.movie", id=movie.id) }}">
+                    {% if movie.picture %}
+                    <img class="img-rounded" src="data:;base64,{{ base64.b64encode(movie.picture).decode('ascii') }}" width="100%"/>
+                    {% else %}
+                    <img class="img-rounded" src="{{ url_for('static', filename='movie.png') }}" width="100%"/>
+                    {% endif %}
+                </a>
+                导演：{{ movie.director }}<br/>
+                价格：￥{{ movie.price }}
+            </div>
+        {% endfor %}
     </div>
-    {% if i % 4 == 3 or movies[i] == movies[-1] %}
-        </div>
-    {% endif %}
 {% endfor %}
 {% endblock %}
