@@ -34,13 +34,14 @@
                 <li class="dropdown">
                     <a href="#" clals="dropdown-toggle" data-toggle="dropdown">
                         <img src="{{ current_user.gravatar(size=18) }}">
-                        账号 <b class="caret"></b>
+                        {{ current_user.name }} <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ url_for('user.profile', username=current_user.username) }}">个人资料</a></li>
                         <li><a href="{{ url_for('user.edit_profile', username=current_user.username) }}">编辑资料</a></li>
                         <li><a href="{{ url_for('auth.change_password') }}">更改密码</a></li>
                         <li><a href="{{ url_for('auth.change_email_request') }}">更改邮箱</a></li>
+                        <li><a href="{{ url_for('auth.change_image') }}">更改头像</a></li>
                         <li><a href="{{ url_for('auth.logout') }}">登出</a></li>
                     </ul>
                 </li>

@@ -1,16 +1,17 @@
-from flask import render_template, redirect, url_for, abort, flash
+from flask import render_template, redirect, url_for, abort, flash, request
 from flask_login import login_required, current_user
 from . import user
 from .forms import EditProfileForm, EditProfileAdminForm
 from .. import db
 from ..models import Role, User
 from ..decorators import admin_required
+import base64
 
 
 @user.route('/<username>')
 def profile(username):
     user = User.query.filter_by(username=username).first_or_404()
-    return render_template('user/profile.html', user=user)
+    return render_template('user/profile.html', user=user, base64=base64)
 
 
 @user.route('/edit-profile', methods=['GET', 'POST'])
@@ -21,14 +22,16 @@ def edit_profile():
         current_user.name = form.name.data
         current_user.location = form.location.data
         current_user.about_me = form.about_me.data
+        if form.picture.data:
+            current_user.picture = request.files['picture'].read()
         db.session.add(current_user._get_current_object())
         db.session.commit()
         flash('个人资料已更新!')
-        return redirect(url_for('.profile', username=current_user.username))
+        return redirect(url_for('profile', username=current_user.username))
     form.name.data = current_user.name
     form.location.data = current_user.location
     form.about_me.data = current_user.about_me
-    return render_template('user/edit_profile.html', form=form)
+    return render_template('user/edit_profile.html', form=form, current_user=current_user, base64=base64)
 
 
 @user.route('/edit-profile/<int:id>', methods=['GET', 'POST'])

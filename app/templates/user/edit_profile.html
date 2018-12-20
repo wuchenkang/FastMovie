@@ -8,6 +8,13 @@
     <h1>编辑个人资料</h1>
 </div>
 <div class="col-md-4">
+    {% if current_user.picture %}
+    <img class="img-rounded" src="data:;base64,{{ base64.b64encode(current_user.picture).decode('ascii') }}" width="100%"/>
+    {% else %}
+    <img class="img-rounded" src="{{ url_for('static', filename='icon.png') }}" width="100%"/>
+    {% endif %}
+</div>
+<div class="col-md-4">
     {{ wtf.quick_form(form) }}
 </div>
 {% endblock %}

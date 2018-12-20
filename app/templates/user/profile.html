@@ -6,9 +6,15 @@
 <div class="page-header">
     <h1>个人资料</h1>
 </div>
+<div class="col-md-4">
+    {% if user.picture %}
+    <img class="img-rounded" src="data:;base64,{{ base64.b64encode(user.picture).decode('ascii') }}" width="100%"/>
+    {% else %}
+    <img class="img-rounded" src="{{ url_for('static', filename='icon.png') }}" width="100%"/>
+    {% endif %}
+</div>
 <div class="col-md-8">
-    <img class="img-rounded profile-thumbnail" src="{{ user.gravatar(size=256) }}">
-    <div class="profile-header">
+    <div>
         <h1>{{ user.username }}</h1>
         {% if user.name or user.location %}
             {% if user.name %}<p>姓名：{{ user.name }}</p>{% endif %}

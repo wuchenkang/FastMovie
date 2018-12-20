@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, BooleanField, SelectField,\
-    SubmitField
+    SubmitField, FileField
+from flask_wtf.file import FileAllowed
 from wtforms.validators import DataRequired, Length, Email, Regexp
 from wtforms import ValidationError
 from ..models import Role, User
@@ -10,6 +11,7 @@ class EditProfileForm(FlaskForm):
     name = StringField('姓名', validators=[Length(0, 64)])
     location = StringField('所在地', validators=[Length(0, 64)])
     about_me = TextAreaField('个性签名')
+    picture = FileField('头像', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('提交')
 
 
@@ -25,6 +27,7 @@ class EditProfileAdminForm(FlaskForm):
     name = StringField('姓名', validators=[Length(0, 64)])
     location = StringField('所在地', validators=[Length(0, 64)])
     about_me = TextAreaField('个性签名')
+    picture = FileField('头像', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('提交')
 
     def __init__(self, user, *args, **kwargs):

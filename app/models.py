@@ -82,6 +82,7 @@ class User(UserMixin, db.Model):
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     avatar_hash = db.Column(db.String(32))
+    picture = db.Column(db.LargeBinary, default=None)
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)

@@ -23,3 +23,22 @@ body{
 .dropdown-menu li{
     list-style: none;
 }
+
+.form-control{
+    resize: none;
+}
+
+.box{
+    position: relative;
+    width: 60%;
+    margin: 0 auto;
+}
+
+#page-header{
+    text-align: center;
+}
+
+.text-info{
+    resize: none;
+}
+
