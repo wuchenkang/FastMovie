@@ -6,3 +6,6 @@
     margin-left: 280px;
 }
 
+.dropdown-menu li{
+    list-style: none;
+}
