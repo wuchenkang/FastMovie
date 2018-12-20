@@ -15,7 +15,7 @@ def make_shell_context():
 
 
 @app.context_processor
-def base64():
+def my_base64():
     return {'base64': base64}
 
 
