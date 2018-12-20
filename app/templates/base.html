@@ -41,9 +41,13 @@
                         {% if current_user.picture %}
                         <img class="img-rounded" src="data:;base64,{{ base64.b64encode(current_user.picture).decode('ascii') }}" width="18px" height="18px"/>
                         {% else %}
-                        <img class="img-rounded" src="{{ url_for('static', filename='icon.png') }}" width="18px" height="18px"/>
+                        <img class="img-rounded" src="{{ url_for('static', filename='favicon.ico') }}" width="18px" height="18px"/>
                         {% endif %}
+                        {% if current_user.name %}
                         {{ current_user.name }} <b class="caret"></b>
+                        {% else %}
+                        游客 <b class="caret"></b>
+                        {% endif %}
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ url_for('user.profile', username=current_user.username) }}">个人资料</a></li>

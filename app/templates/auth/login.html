@@ -4,13 +4,17 @@
 {% block title %}登陆{% endblock %}
 
 {% block page_content %}
-<div class="page-header">
+<div class="page-header" id="page-header">
     <h1>登陆</h1>
 </div>
-<div class="col-md-4">
+<div class="bpx">
+    <div class="box1" style="width:40%;margin:0 auto;">
+    <div class="col-md-12">
     {{ wtf.quick_form(form) }}
     <br>
     <p>忘记密码？ <a href="{{ url_for('auth.password_reset_request') }}">点此重置密码</a>.</p>
     <p>新用户？ <a href="{{ url_for('auth.register') }}">点此注册</a>.</p>
+</div>
+</div>
 </div>
 {% endblock %}
