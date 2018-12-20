@@ -12,7 +12,7 @@ import base64
 @login_required
 @admin_required
 def manage_movies():
-    movies = Movie.query.all()
+    movies = Movie.query.order_by(Movie.name).all()
     return render_template('manage/manage_movies.html', movies=movies)
 
 

@@ -9,7 +9,7 @@ import base64
 
 @subject.route('/movies')
 def movies():
-    movies = Movie.query.all()
+    movies = Movie.query.order_by(Movie.name).all()
     return render_template('subject/movies.html', movies=movies)
 
 

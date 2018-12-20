@@ -20,8 +20,9 @@
             <img class="img-rounded" src="{{ url_for('static', filename='movie.png') }}" width="100%"/>
             {% endif %}
         </a>
-        导演：{{ movie.director }}<br/>
-        价格：￥{{ movie.price }}
+        <b>名称：</b>{{ movie.name }}<br/>
+        <b>导演：</b>{{ movie.director }}<br/>
+        <b>价格：</b>￥{{ movie.price }}
     </div>
 {% endfor %}
 {% endblock %}
