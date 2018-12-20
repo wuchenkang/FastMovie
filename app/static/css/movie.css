@@ -1,0 +1,19 @@
+.form-control{
+    resize: none;
+}
+
+.page-header h1{
+    text-align: center;
+}
+
+.box{
+    position: relative;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.box1{
+    position: relative;
+    width: 80%;
+    margin: 0 auto;
+}

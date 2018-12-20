@@ -1,20 +1,25 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/movie.css') }}">
+{% endblock %}
 {% block title %}编辑电影资料{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
     <h1>编辑电影资料</h1>
 </div>
-<div class="col-md-4">
-    {% if movie.picture %}
-    <img class="img-rounded" src="data:;base64,{{ base64.b64encode(movie.picture).decode('ascii') }}" width="100%"/>
-    {% else %}
-    <img class="img-rounded" src="{{ url_for('static', filename='movie.png') }}" width="100%"/>
-    {% endif %}
-</div>
-<div class="col-md-4">
-    {{ wtf.quick_form(form) }}
+<div class="box">
+    <div class="col-md-6">
+        {% if movie.picture %}
+        <img class="img-rounded" src="data:;base64,{{ base64.b64encode(movie.picture).decode('ascii') }}" width="100%"/>
+        {% else %}
+        <img class="img-rounded" src="{{ url_for('static', filename='movie.png') }}" width="100%"/>
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        {{ wtf.quick_form(form) }}
+    </div>
 </div>
 {% endblock %}
