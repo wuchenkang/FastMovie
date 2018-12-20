@@ -46,7 +46,7 @@
                         {% if current_user.name %}
                         {{ current_user.name }} <b class="caret"></b>
                         {% else %}
-                        游客 <b class="caret"></b>
+                        {{ current_user.username }} <b class="caret"></b>
                         {% endif %}
                     </a>
                     <ul class="dropdown-menu">
