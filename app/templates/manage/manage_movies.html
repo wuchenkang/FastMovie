@@ -23,24 +23,29 @@
                 <td>编辑</td>
             </tr>
             {% for movie in movies %}
-                    <tr>
-                        <td>{{ movie.name }}</td>
-                        <td>{{ movie.date }}</td>
-                        <td>{{ movie.price }}</td>
-                        <td>{{ movie.director }}</td>
-                        <td>
-                            {% if movie.description|length < 32 %}
-                                {{ movie.description }}
-                            {% else %}
-                                {{ movie.description[:30] }}...
-                            {% endif %}
-                        </td>
-                        <td>
-                            <a href="{{ url_for("manage.edit_movie", id=movie.id) }}">编辑</a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td>{{ movie.name }}</td>
+                    <td>{{ movie.date }}</td>
+                    <td>{{ movie.price }}</td>
+                    <td>{{ movie.director }}</td>
+                    <td>
+                        {% if movie.description|length < 32 %}
+                            {{ movie.description }}
+                        {% else %}
+                            {{ movie.description[:30] }}...
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for("manage.edit_movie", id=movie.id) }}">编辑</a>
+                    </td>
+                </tr>
             {% endfor %}
         </table>
+        <div style="text-align:center;">
+            <a href="{{ url_for("manage.create_movie") }}">
+                <button class="btn btn-primary" type="button" >创建</button>
+            </a>
+        </div>
     </div>
 </div>
 {% endblock %}
