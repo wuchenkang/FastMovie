@@ -13,10 +13,10 @@ import base64
 @admin_required
 def manage_movies():
     movies = Movie.query.all()
-    return render_template('manage/manage_movies.html', movies=movies, base64=base64, len=len)
+    return render_template('manage/manage_movies.html', movies=movies)
 
 
-@manage.route('/edit-movie/<int:id>', methods=['GET', 'POST'])
+@manage.route('/edit-subject/<int:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def edit_movie(id):
@@ -44,10 +44,10 @@ def edit_movie(id):
     form.price.data = movie.price
     form.director.data = movie.director
     form.description.data = movie.description
-    return render_template('manage/edit_movie.html', form=form, movie=movie, base64=base64)
+    return render_template('manage/edit_movie.html', form=form, movie=movie)
 
 
-@manage.route('/create-movie', methods=['GET', 'POST'])
+@manage.route('/create-subject', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def create_movie():
@@ -70,4 +70,4 @@ def create_movie():
     form.price.data = movie.price
     form.director.data = movie.director
     form.description.data = movie.description
-    return render_template('manage/create_movie.html', form=form, base64=base64)
+    return render_template('manage/create_movie.html', form=form)

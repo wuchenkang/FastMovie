@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/movie.css') }}">
+{% endblock %}
+{% block title %}{{ movie.name }}{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>{{ movie.name }}</h1>
+</div>
+
+<div class="col-md-3">
+    {% if movie.picture %}
+    <img class="img-rounded" src="data:;base64,{{ base64.b64encode(movie.picture).decode('ascii') }}" width="100%"/>
+    {% else %}
+    <img class="img-rounded" src="{{ url_for('static', filename='movie.png') }}" width="100%"/>
+    {% endif %}
+</div>
+<div class="col-md-9">
+    <p>名称:{{ movie.name }}</p>
+    <p>上映日期：{{ movie.date }}</p>
+    <p>价格：{{ movie.price }}</p>
+    <p>导演：{{ movie.director }}</p>
+    <p>简介：
+    </p><p>
+        {% if movie.description %}
+            {{ movie.description }}
+        {% else %}
+            {{ movie.description }}
+        {% endif %}
+    </p>
+</div>
+{% endblock %}

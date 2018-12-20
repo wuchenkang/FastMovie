@@ -29,7 +29,7 @@
                         <td>{{ movie.price }}</td>
                         <td>{{ movie.director }}</td>
                         <td>
-                            {% if len(movie.description) < 32 %}
+                            {% if movie.description|length < 32 %}
                                 {{ movie.description }}
                             {% else %}
                                 {{ movie.description[:30] }}...

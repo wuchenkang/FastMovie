@@ -38,4 +38,7 @@ def create_app(config_name):
     from .manage import manage as manage_blueprint
     app.register_blueprint(manage_blueprint, url_prefix='/manage')
 
+    from .subject import subject as movie_blueprint
+    app.register_blueprint(movie_blueprint, url_prefix='/subject')
+
     return app
