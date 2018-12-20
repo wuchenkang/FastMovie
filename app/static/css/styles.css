@@ -1,0 +1,25 @@
+.profile-thumbnail {
+    position: absolute;
+}
+.profile-header {
+    min-height: 260px;
+    margin-left: 280px;
+}
+
+body{
+    background: #f3f3f3;
+}
+
+#main{
+    background:#fff;
+    width: 80%;
+    margin:0 auto;
+    padding: 10px;
+    overflow: hidden;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+.dropdown-menu li{
+    list-style: none;
+}
