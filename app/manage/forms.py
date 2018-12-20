@@ -15,6 +15,8 @@ class EditMovieForm(FlaskForm):
     description = TextAreaField('简介')
     submit = SubmitField('提交')
     delete = SubmitField('删除')
+    back = SubmitField('返回', render_kw={
+        'onclick': "javascript:history.back(1);"})
 
     def __init__(self, movie, *args, **kwargs):
         super(EditMovieForm, self).__init__(*args, **kwargs)
@@ -34,6 +36,8 @@ class CreateMovieForm(FlaskForm):
     director = StringField('导演')
     description = TextAreaField('简介')
     submit = SubmitField('提交')
+    back = SubmitField('返回', render_kw={
+        'onclick': "javascript:history.back(1);"})
 
     def validate_name(self, field):
         if Movie.query.filter_by(name=field.data).first():
