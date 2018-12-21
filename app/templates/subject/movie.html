@@ -56,16 +56,19 @@
         </li>
         {% endfor %}
     </ul>
-    {% if pagination %}
-    <div class="pagination">
-        {{ macros.pagination_widget(pagination, '.movie', id=movie.id) }}
-    </div>
-    {% endif %}
     <div style="text-align:center;">
         <a href="{{ url_for('subject.comment', id=movie.id, comments=comments, pagination=pagination) }}">
             <button class="btn btn-primary" type="button">评论</button>
         </a>
     </div>
+    {% if pagination %}
+    <div style="text-align: center;">
+        <div class="pagination">
+            {{ macros.pagination_widget(pagination, '.movie', id=movie.id) }}
+        </div>
+    </div>
+    {% endif %}
+
 </div>
 
 {% endblock %}

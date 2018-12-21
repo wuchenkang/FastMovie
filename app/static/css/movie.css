@@ -48,3 +48,12 @@ ul#cmts li{
 #submit,#back{
     float: left;
 }
+
+.movie-content{
+    margin: 10px;
+    text-align:center;
+}
+
+.movie{
+    margin-bottom: 10px;
+}
