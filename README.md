@@ -1,2 +1,2 @@
 # DatabaseSystemProject
-Database System Project. A simple blog website built with flask.
+Database System Project. A simple movie website built with flask.
