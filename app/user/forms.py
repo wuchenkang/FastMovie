@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, BooleanField, SelectField,\
-    SubmitField, FileField
+from wtforms import StringField, TextAreaField, BooleanField, SelectField, \
+    SubmitField, FileField, DecimalField
 from flask_wtf.file import FileAllowed
 from wtforms.validators import DataRequired, Length, Email, Regexp
 from wtforms import ValidationError
@@ -17,7 +17,7 @@ class EditProfileForm(FlaskForm):
 
 class EditProfileAdminForm(FlaskForm):
     email = StringField('邮箱', validators=[DataRequired(), Length(1, 64),
-                                             Email()])
+                                          Email()])
     username = StringField('用户名', validators=[
         DataRequired(), Length(1, 64),
         Regexp('^[A-Za-z][A-Za-z0-9_]*$', 0,
@@ -45,3 +45,8 @@ class EditProfileAdminForm(FlaskForm):
         if field.data != self.user.username and \
                 User.query.filter_by(username=field.data).first():
             raise ValidationError('该用户名已被使用！')
+
+
+class CreateMoneyForm(FlaskForm):
+    money = DecimalField('充值金额', validators=[DataRequired()], rounding=2)
+    submit = SubmitField('充值')

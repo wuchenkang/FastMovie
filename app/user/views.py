@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, abort, flash, request
 from flask_login import login_required, current_user
 from . import user
-from .forms import EditProfileForm, EditProfileAdminForm
+from .forms import EditProfileForm, EditProfileAdminForm, CreateMoneyForm
 from .. import db
 from ..models import Role, User
 from ..decorators import admin_required
@@ -60,3 +60,17 @@ def edit_profile_admin(id):
     form.location.data = user.location
     form.about_me.data = user.about_me
     return render_template('user/edit_profile.html', form=form, user=user)
+
+
+@user.route('/balance', methods=['GET', 'POST'])
+@login_required
+def balance():
+    form = CreateMoneyForm()
+    if form.validate_on_submit():
+        money = form.money.data
+        user = User.query.filter(User.id == current_user.id).first()
+        user.money += float(money)
+        db.session.commit()
+        flash("充值成功！")
+        return redirect(url_for('.balance'))
+    return render_template("user/balance.html", form=form)

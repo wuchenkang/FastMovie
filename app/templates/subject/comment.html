@@ -39,8 +39,10 @@
         {% endfor %}
     </ul>
     {% if pagination %}
-    <div class="pagination">
-        {{ macros.pagination_widget(pagination, '.comment', id=movie.id) }}
+    <div style="text-align: center;">
+        <div class="pagination">
+            {{ macros.pagination_widget(pagination, '.comment', id=movie.id) }}
+        </div>
     </div>
     {% endif %}
 </div>
