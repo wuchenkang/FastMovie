@@ -86,7 +86,10 @@ class User(UserMixin, db.Model):
     money = db.Column(db.Float, default=0.0)
     comments = db.relationship(
         'Comment',backref='author',
-        lazy='dynamic')
+        lazy='dynamic',
+        cascade='all, delete',
+        passive_deletes=True
+    )
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -209,7 +212,10 @@ class Movie(db.Model):
     comments = db.relationship(
         'Comment',
         backref='movie',
-        lazy='dynamic')
+        lazy='dynamic',
+        cascade='all, delete',
+        passive_deletes=True
+    )
 
 
 login_manager.anonymous_user = AnonymousUser
@@ -226,5 +232,5 @@ class Comment(db.Model):
     title = db.Column(db.Text)
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id', ondelete='CASCADE'))

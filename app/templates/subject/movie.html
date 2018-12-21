@@ -43,7 +43,7 @@
                 {% else %}
                 <img class="img-rounded avatar" src="{{ url_for('static', filename='favicon.ico') }}"/>
                 {% endif %}
-                <span class="glyphicon glyphicon-subtitles avatar-title">{{ comment.body_html }}</span>
+                <span class="glyphicon glyphicon-subtitles avatar-title">{{ comment.title }}</span>
             </div>
             <div class="comment-group">
                 <p class="comment-content">{{ comment.body }}</p>

@@ -28,7 +28,7 @@ def comment(id):
         if form.validate_on_submit():
             if form.submit.data:
                 cmt = Comment()
-                cmt.body_html = form.title.data
+                cmt.title = form.title.data
                 cmt.body = form.comment.data
                 movie.comments.append(cmt)
                 user.comments.append(cmt)

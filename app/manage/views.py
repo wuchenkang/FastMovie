@@ -38,7 +38,6 @@ def edit_movie(id):
             comments = Comment.query.filter(Comment.movie_id==id).all()
             for comment in comments:
                 db.session.delete(comment)
-                db.session.commit()
             db.session.delete(movie)
             db.session.commit()
             flash('电影资料已删除')
