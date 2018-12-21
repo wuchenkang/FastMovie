@@ -1,10 +1,9 @@
 from flask import render_template, redirect, request, url_for, flash
-from flask_login import login_required
+from flask_login import login_required, current_user
 from . import subject
 from .. import db
-from ..decorators import admin_required
-from ..models import Movie
-import base64
+from .forms import CreateCommentForm
+from ..models import Movie, User, Comment
 
 
 @subject.route('/movies')
@@ -17,3 +16,23 @@ def movies():
 def movie(id):
     movie = Movie.query.get_or_404(id)
     return render_template('subject/movie.html', movie=movie)
+
+
+@subject.route('/movie/<int:id>/comment', methods=['GET', 'POST'])
+@login_required
+def comment(id):
+    movie = Movie.query.get_or_404(id)
+    user = User.query.filter(User.id == current_user.id).first()
+    form = CreateCommentForm()
+    if form.validate_on_submit():
+        if form.validate_on_submit():
+            if form.submit.data:
+                cmt = Comment()
+                cmt.body_html = form.title.data
+                cmt.body = form.comment.data
+                movie.comments.append(cmt)
+                user.comments.append(cmt)
+                db.session.commit()
+                flash('评论成功')
+            return redirect(url_for('subject.movie', id=id))
+    return render_template('subject/comment.html', form=form, movie=movie)
