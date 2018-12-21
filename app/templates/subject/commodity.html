@@ -29,7 +29,7 @@
         <p><b>收货方式：</b>{{ voucher.receive_method }}</p>
         <p><b>发货人：</b>迅影</p>
         <p><b>订单编号：</b>{{ voucher.order_identify }}</p>
-        <p><b>创建时间：</b>{{ voucher.timestamp }}</p>
+        <p><b>创建时间：</b>{{ (voucher.timestamp+timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S") }}</p>
     </div>
     <div style="text-align:center;">
         {{ wtf.quick_form(form) }}

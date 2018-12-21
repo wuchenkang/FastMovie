@@ -33,7 +33,9 @@
         <button class="btn btn-success" style="margin:0 auto;" onclick= "javascript:window.location.href='{{ url_for('subject.buy', id=movie.id) }}';">购买</button>
     </div>
     <hr>
-    <h3><span class="label label-default">评论</span></h3>
+    {% if comments %}
+        <h3><span class="label label-default">评论</span></h3>
+    {% endif %}
     <ul id="cmts">
         {% for comment in comments %}
         <li>

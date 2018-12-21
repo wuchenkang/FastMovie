@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "pagination.html" as macros %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block title %}订单详情{% endblock %}
+
+{% block page_content %}
+<div class="page-header" id="page-header">
+    <h1>订单详情</h1>
+</div>
+
+<div class="col-md-12">
+    <table class="table">
+        <tr>
+            <td>订单编号</td>
+            <td>下单日期</td>
+            <td>运费</td>
+            <td>支付方式</td>
+            <td>收取方式</td>
+            <td>电影名称</td>
+            <td>电影价格</td>
+        </tr>
+        {% for voucher in vouchers %}
+        <tr>
+            <td>{{ voucher.order_identify }}</td>
+            <td>{{ voucher.timestamp }}</td>
+            <td>{{ voucher.freight }}</td>
+            <td>{{ voucher.payment_method }}</td>
+            <td>{{ voucher.receive_method }}</td>
+            <td>
+                <a href="{{ url_for('subject.movie', id=voucher.movie.id) }}">
+                    {{ voucher.movie.name }}
+                </a>
+            </td>
+            <td>{{ voucher.movie.price }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% if pagination %}
+    <div style="text-align: center;">
+        <div class="pagination">
+            {{ macros.pagination_widget(pagination, 'manage.manage_movies') }}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,9 +1,9 @@
-from flask import render_template, redirect, url_for, abort, flash, request
+from flask import render_template, redirect, url_for, current_app, flash, request
 from flask_login import login_required, current_user
 from . import user
 from .forms import EditProfileForm, EditProfileAdminForm, CreateMoneyForm
 from .. import db
-from ..models import Role, User
+from ..models import Role, User, Voucher
 from ..decorators import admin_required
 import base64
 
@@ -74,3 +74,15 @@ def balance():
         flash("充值成功！")
         return redirect(url_for('.balance'))
     return render_template("user/balance.html", form=form)
+
+
+@user.route('/order')
+@login_required
+def order():
+    page = request.args.get('page', 1, type=int)
+    pagination = Voucher.query.filter(Voucher.user_id == current_user.id).paginate(
+        page, per_page=current_app.config['ITEM_PER_PAGE'],
+        error_out=False
+    )
+    vouchers = pagination.items
+    return render_template("user/order.html", vouchers=vouchers, pagination=pagination)
