@@ -17,9 +17,9 @@
         {% for comment in movie.comments %}
         <li>
             <div class="avatar-group">
-                {% if current_user.picture %}
+                {% if comment.author.picture %}
                 <img class="img-rounded avatar"
-                     src="data:;base64,{{ base64.b64encode(current_user.picture).decode('ascii') }}"/>
+                     src="data:;base64,{{ base64.b64encode(comment.author.picture).decode('ascii') }}"/>
                 {% else %}
                 <img class="img-rounded avatar" src="{{ url_for('static', filename='favicon.ico') }}"/>
                 {% endif %}
@@ -36,5 +36,6 @@
         {% endfor %}
     </ul>
     {{ wtf.quick_form(form) }}
+    <button class="btn btn-default" id="back" onclick= "javascript:window.location.href='{{ url_for('subject.movie', id=movie.id) }}';">返回</button>
 </div>
 {% endblock %}

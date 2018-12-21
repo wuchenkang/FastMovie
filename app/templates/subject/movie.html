@@ -37,9 +37,9 @@
         {% for comment in movie.comments %}
         <li>
             <div class="avatar-group">
-                {% if current_user.picture %}
+                {% if comment.author.picture %}
                 <img class="img-rounded avatar"
-                     src="data:;base64,{{ base64.b64encode(current_user.picture).decode('ascii') }}"/>
+                     src="data:;base64,{{ base64.b64encode(comment.author.picture).decode('ascii') }}"/>
                 {% else %}
                 <img class="img-rounded avatar" src="{{ url_for('static', filename='favicon.ico') }}"/>
                 {% endif %}
