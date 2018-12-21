@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% import "pagination.html" as macros %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/movie.css') }}">
+{% endblock %}
+{% block title %}{{ movie.name }}{% endblock %}
+
+{% block page_content %}
+<div class="page-header" id="page-header">
+    <h1>{{ movie.name }}</h1>
+</div>
+
+<div class="box">
+    <div class="col-md-4">
+        {% if movie.picture %}
+        <img class="img-rounded" src="data:;base64,{{ base64.b64encode(movie.picture).decode('ascii') }}" width="100%"/>
+        {% else %}
+        <img class="img-rounded" src="{{ url_for('static', filename='movie.png') }}" width="100%"/>
+        {% endif %}
+    </div>
+    <div class="col-md-8">
+        <p><b>商品名称：</b>{{ movie.name }}</p>
+        <p><b>价格：</b>{{ movie.price }}</p>
+        <p><b>支付方式：</b>网上支付</p>
+        <p><b>运费：</b>0</p>
+        <p><b>收货人：</b>{{ current_user.name }}</p>
+        <p><b>收货方式：</b>在线收取</p>
+        <p><b>发货人：</b>迅影</p>
+        <p><b>订单编号：</b>297499586840238150</p>
+        <p><b>创建时间：</b>2018-12-15 15:34:02</p>
+    </div>
+    <div style="text-align:center;">
+        <button class="btn btn-success" style="margin:0 auto;" onclick= "javascript:window.location.href='{{ url_for('subject.movie', id=movie.id) }}';">确认购买</button>
+    </div>
+</div>
+
+{% endblock %}

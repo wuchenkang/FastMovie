@@ -30,7 +30,7 @@ def movie(id):
     return render_template('subject/movie.html', movie=movie, comments=comments, pagination=pagination)
 
 
-@subject.route('/movie/<int:id>/comment', methods=['GET', 'POST'])
+@subject.route('/movie/comment/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def comment(id):
     movie = Movie.query.get_or_404(id)
@@ -54,3 +54,10 @@ def comment(id):
                 flash('评论成功')
             return redirect(url_for('subject.movie', id=id))
     return render_template('subject/comment.html', form=form, movie=movie, comments=comments, pagination=pagination)
+
+
+@subject.route('/movie/commodity/<int:id>/', methods=['GET', 'POST'])
+@login_required
+def buy(id):
+    movie = Movie.query.get_or_404(id)
+    return render_template('subject/commodity.html', movie=movie)
