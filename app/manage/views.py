@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for, flash
+from flask import render_template, redirect, request, url_for, flash, current_app
 from flask_login import login_required
 from . import manage
 from .forms import EditMovieForm, CreateMovieForm
@@ -12,8 +12,13 @@ import base64
 @login_required
 @admin_required
 def manage_movies():
-    movies = Movie.query.order_by(Movie.name).all()
-    return render_template('manage/manage_movies.html', movies=movies)
+    page = request.args.get('page', 1, type=int)
+    pagination = Movie.query.order_by(Movie.name).paginate(
+        page, per_page=current_app.config['ITEM_PER_PAGE'],
+        error_out=False
+    )
+    movies = pagination.items
+    return render_template('manage/manage_movies.html', movies=movies, pagination=pagination)
 
 
 @manage.route('/edit-subject/<int:id>', methods=['GET', 'POST'])

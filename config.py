@@ -14,6 +14,8 @@ class Config:
     MAIL_SENDER = 'Fast Movie Team <%s>' % MAIL_USERNAME
     ADMIN = os.environ.get('ADMIN')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    ITEM_PER_PAGE = 12
+    COMMENT_PER_PAGE = 8
 
     @staticmethod
     def init_app(app):

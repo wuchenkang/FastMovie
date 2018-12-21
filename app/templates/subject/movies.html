@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% import "pagination.html" as macros %}
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/movie.css') }}">
@@ -14,7 +15,7 @@
 {% for row in movies|batch(4) %}
     <div class="row">
         {% for movie in row %}
-            <div class="col-md-3">
+            <div class="col-md-3 movie">
                 <a href="{{ url_for("subject.movie", id=movie.id) }}" target ="_blank">
                     {% if movie.picture %}
                     <img class="img-rounded" src="data:;base64,{{ base64.b64encode(movie.picture).decode('ascii') }}" width="100%"/>
@@ -22,10 +23,18 @@
                     <img class="img-rounded" src="{{ url_for('static', filename='movie.png') }}" width="100%"/>
                     {% endif %}
                 </a>
+                <div class="movie-content">
+                名称：{{ movie.name }}<br/>
                 导演：{{ movie.director }}<br/>
-                价格：￥{{ movie.price }}
+                价格：￥{{ movie.price }}<br/>
+                </div>
             </div>
         {% endfor %}
     </div>
 {% endfor %}
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.movies') }}
+</div>
+{% endif %}
 {% endblock %}

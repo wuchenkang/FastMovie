@@ -13,8 +13,10 @@
 
 <div class="box">
     <h3><span class="label label-default">评论</span></h3>
+    {{ wtf.quick_form(form) }}
+    <button class="btn btn-default" id="back" onclick= "javascript:window.location.href='{{ url_for('subject.movie', id=movie.id) }}';">返回</button>
     <ul id="cmts">
-        {% for comment in movie.comments %}
+        {% for comment in comments %}
         <li>
             <div class="avatar-group">
                 {% if comment.author.picture %}
@@ -35,7 +37,10 @@
         </li>
         {% endfor %}
     </ul>
-    {{ wtf.quick_form(form) }}
-    <button class="btn btn-default" id="back" onclick= "javascript:window.location.href='{{ url_for('subject.movie', id=movie.id) }}';">返回</button>
+    {% if pagination %}
+    <div class="pagination">
+        {{ macros.pagination_widget(pagination, '.movie', id=movie.id) }}
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
