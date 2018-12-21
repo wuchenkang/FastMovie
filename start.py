@@ -3,6 +3,8 @@ from flask_migrate import Migrate
 from app import create_app, db
 from app.models import User, Role, Permission
 import base64
+from datetime import datetime, timedelta
+
 
 app = create_app(os.getenv('CONFIG') or 'default')
 migrate = Migrate(app, db)
@@ -16,7 +18,7 @@ def make_shell_context():
 
 @app.context_processor
 def my_base64():
-    return {'base64': base64, 'range': range}
+    return {'base64': base64, 'range': range, 'datetime':datetime, 'timedelta': timedelta}
 
 
 @app.cli.command()
