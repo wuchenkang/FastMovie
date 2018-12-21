@@ -34,6 +34,12 @@ def movie(id):
 @login_required
 def comment(id):
     movie = Movie.query.get_or_404(id)
+    page = request.args.get('page', 1, type=int)
+    pagination = Comment.query.filter(Comment.movie_id == movie.id).order_by(Comment.timestamp.desc()).paginate(
+        page, per_page=current_app.config['COMMENT_PER_PAGE'],
+        error_out=False
+    )
+    comments = pagination.items
     user = User.query.filter(User.id == current_user.id).first()
     form = CreateCommentForm()
     if form.validate_on_submit():
@@ -47,4 +53,4 @@ def comment(id):
                 db.session.commit()
                 flash('评论成功')
             return redirect(url_for('subject.movie', id=id))
-    return render_template('subject/comment.html', form=form, movie=movie)
+    return render_template('subject/comment.html', form=form, movie=movie, comments=comments, pagination=pagination)
