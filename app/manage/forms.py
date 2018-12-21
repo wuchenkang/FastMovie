@@ -9,7 +9,7 @@ from ..models import Movie
 class EditMovieForm(FlaskForm):
     name = StringField('名称', validators=[DataRequired()])
     date = DateField('上映日期')
-    price = DecimalField('价格', validators=[DataRequired()], rounding=2)
+    price = DecimalField('价格', validators=[DataRequired()], places=2)
     picture = FileField('海报', validators=[FileAllowed(['jpg', 'png'])])
     director = StringField('导演')
     description = TextAreaField('简介')
@@ -31,7 +31,7 @@ class EditMovieForm(FlaskForm):
 class CreateMovieForm(FlaskForm):
     name = StringField('名称', validators=[DataRequired()])
     date = DateField('上映日期')
-    price = DecimalField('价格', rounding=2)
+    price = DecimalField('价格', places=2)
     picture = FileField('海报', validators=[FileAllowed(['jpg', 'png'])])
     director = StringField('导演')
     description = TextAreaField('简介')

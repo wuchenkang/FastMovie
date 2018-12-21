@@ -48,5 +48,5 @@ class EditProfileAdminForm(FlaskForm):
 
 
 class CreateMoneyForm(FlaskForm):
-    money = DecimalField('充值金额', validators=[DataRequired()], rounding=2)
+    money = DecimalField('充值金额', validators=[DataRequired()], places=2)
     submit = SubmitField('充值')

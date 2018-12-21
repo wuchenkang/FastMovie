@@ -69,7 +69,7 @@ def balance():
     if form.validate_on_submit():
         money = form.money.data
         user = User.query.filter(User.id == current_user.id).first()
-        user.money += float(money)
+        user.money += money
         db.session.commit()
         flash("充值成功！")
         return redirect(url_for('.balance'))

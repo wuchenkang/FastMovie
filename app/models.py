@@ -83,7 +83,7 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     # avatar_hash = db.Column(db.String(32))
     picture = db.Column(db.LargeBinary, default=None)
-    money = db.Column(db.Float, default=0.0)
+    money = db.Column(db.Numeric(16, 2), default=0.0)
     comments = db.relationship(
         'Comment',backref='author',
         lazy='dynamic',
@@ -205,7 +205,7 @@ class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     date = db.Column(db.Date, default="1970-1-1")
-    price = db.Column(db.Numeric(2), default=0.0)
+    price = db.Column(db.Numeric(16, 2), default=0.0)
     picture = db.Column(db.LargeBinary)
     director = db.Column(db.String(64), default='未知')
     description = db.Column(db.Text, default='暂无。')
