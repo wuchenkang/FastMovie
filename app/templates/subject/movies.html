@@ -15,7 +15,7 @@
     <div class="row">
         {% for movie in row %}
             <div class="col-md-3">
-                <a href="{{ url_for("subject.movie", id=movie.id) }}">
+                <a href="{{ url_for("subject.movie", id=movie.id) }}" target ="_blank">
                     {% if movie.picture %}
                     <img class="img-rounded" src="data:;base64,{{ base64.b64encode(movie.picture).decode('ascii') }}" width="100%"/>
                     {% else %}

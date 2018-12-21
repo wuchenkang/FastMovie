@@ -83,6 +83,8 @@ class User(UserMixin, db.Model):
     last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     avatar_hash = db.Column(db.String(32))
     picture = db.Column(db.LargeBinary, default=None)
+    money = db.Column(db.Float, default=0.0)
+    comments = db.relationship('Comment', backref='author', lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -202,6 +204,7 @@ class Movie(db.Model):
     picture = db.Column(db.LargeBinary)
     director = db.Column(db.String(64), default='未知')
     description = db.Column(db.Text, default='暂无。')
+    comments = db.relationship('Comment', backref='movie', lazy='dynamic')
 
 
 login_manager.anonymous_user = AnonymousUser
@@ -210,3 +213,14 @@ login_manager.anonymous_user = AnonymousUser
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+class Comment(db.Model):
+    __tablename__ = 'comments'
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.Text)
+    body_html = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    disabled = db.Column(db.Boolean)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'))
