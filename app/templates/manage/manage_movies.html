@@ -29,11 +29,13 @@
                     <td>{{ movie.price }}</td>
                     <td>{{ movie.director }}</td>
                     <td>
+                    {% if movie.description %}
                         {% if movie.description|length < 32 %}
                             {{ movie.description }}
                         {% else %}
                             {{ movie.description[:30] }}...
                         {% endif %}
+                    {% endif %}
                     </td>
                     <td>
                         <a href="{{ url_for("manage.edit_movie", id=movie.id) }}">编辑</a>

@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: e99cbd81ce41
+Revision ID: f131284dae88
 Revises: 
-Create Date: 2018-12-21 10:43:01.151118
+Create Date: 2018-12-21 16:43:50.823791
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'e99cbd81ce41'
+revision = 'f131284dae88'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -49,7 +49,6 @@ def upgrade():
     sa.Column('about_me', sa.Text(), nullable=True),
     sa.Column('member_since', sa.DateTime(), nullable=True),
     sa.Column('last_seen', sa.DateTime(), nullable=True),
-    sa.Column('avatar_hash', sa.String(length=32), nullable=True),
     sa.Column('picture', sa.LargeBinary(), nullable=True),
     sa.Column('money', sa.Float(), nullable=True),
     sa.ForeignKeyConstraint(['role_id'], ['roles.id'], ),
@@ -59,10 +58,9 @@ def upgrade():
     op.create_index(op.f('ix_users_username'), 'users', ['username'], unique=True)
     op.create_table('comments',
     sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('title', sa.Text(), nullable=True),
     sa.Column('body', sa.Text(), nullable=True),
-    sa.Column('body_html', sa.Text(), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
-    sa.Column('disabled', sa.Boolean(), nullable=True),
     sa.Column('author_id', sa.Integer(), nullable=True),
     sa.Column('movie_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['author_id'], ['users.id'], ),

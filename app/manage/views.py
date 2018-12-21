@@ -4,7 +4,7 @@ from . import manage
 from .forms import EditMovieForm, CreateMovieForm
 from .. import db
 from ..decorators import admin_required
-from ..models import Movie
+from ..models import Movie, Comment
 import base64
 
 
@@ -35,6 +35,10 @@ def edit_movie(id):
             db.session.commit()
             flash('电影资料已更新')
         elif form.delete.data:
+            comments = Comment.query.filter(Comment.movie_id==id).all()
+            for comment in comments:
+                db.session.delete(comment)
+                db.session.commit()
             db.session.delete(movie)
             db.session.commit()
             flash('电影资料已删除')
