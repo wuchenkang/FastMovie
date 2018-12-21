@@ -57,7 +57,7 @@
         {% endfor %}
     </ul>
     <div style="text-align:center;">
-        <a href="{{ url_for('subject.comment', id=movie.id, comments=comments, pagination=pagination) }}">
+        <a href="{{ url_for('subject.comment', id=movie.id) }}">
             <button class="btn btn-primary" type="button">评论</button>
         </a>
     </div>
