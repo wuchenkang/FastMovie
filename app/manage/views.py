@@ -21,7 +21,7 @@ def manage_movies():
     return render_template('manage/manage_movies.html', movies=movies, pagination=pagination)
 
 
-@manage.route('/edit-subject/<int:id>', methods=['GET', 'POST'])
+@manage.route('/edit-movie/<int:id>', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def edit_movie(id):
@@ -55,7 +55,7 @@ def edit_movie(id):
     return render_template('manage/edit_movie.html', form=form, movie=movie)
 
 
-@manage.route('/create-subject', methods=['GET', 'POST'])
+@manage.route('/create-movie', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def create_movie():

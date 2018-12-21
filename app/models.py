@@ -205,7 +205,7 @@ class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     date = db.Column(db.Date, default="1970-1-1")
-    price = db.Column(db.Float, default=0.0)
+    price = db.Column(db.Numeric(2), default=0.0)
     picture = db.Column(db.LargeBinary)
     director = db.Column(db.String(64), default='未知')
     description = db.Column(db.Text, default='暂无。')
