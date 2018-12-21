@@ -85,7 +85,13 @@ class User(UserMixin, db.Model):
     picture = db.Column(db.LargeBinary, default=None)
     money = db.Column(db.Numeric(16, 2), default=0.0)
     comments = db.relationship(
-        'Comment',backref='author',
+        'Comment', backref='author',
+        lazy='dynamic',
+        cascade='all, delete',
+        passive_deletes=True
+    )
+    vouchers = db.relationship(
+        'Voucher', backref='user',
         lazy='dynamic',
         cascade='all, delete',
         passive_deletes=True
@@ -216,7 +222,13 @@ class Movie(db.Model):
         cascade='all, delete',
         passive_deletes=True
     )
-
+    vouchers = db.relationship(
+        'Voucher',
+        backref='movie',
+        lazy='dynamic',
+        cascade='all, delete',
+        passive_deletes=True
+    )
 
 login_manager.anonymous_user = AnonymousUser
 
@@ -233,4 +245,16 @@ class Comment(db.Model):
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id', ondelete='CASCADE'))
+
+
+class Voucher(db.Model):
+    __tablename__ = 'vouchers'
+    id = db.Column(db.Integer, primary_key=True)
+    order_identify = db.Column(db.String(64), unique=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    freight = db.Column(db.Numeric(16, 2), default=0.0)
+    payment_method = db.Column(db.String(64), default="在线支付")
+    receive_method = db.Column(db.String(64), default="线下收取")
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id', ondelete='CASCADE'))
