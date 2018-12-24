@@ -1,10 +1,12 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 9.x                               */
-/* Created on:     2018/12/24 22:49:12                          */
+/* Created on:     2018/12/24 22:59:17                          */
 /*==============================================================*/
 
 
-drop trigger DeleteCommentTrigger on Comments;
+drop trigger DeleteMovieTriggle on Movies;
+
+drop trigger DeleteUserTrigger on Users;
 
 drop index CommentMovie_FK;
 
@@ -205,18 +207,34 @@ alter table Vouchers
       on delete restrict on update restrict;
 
 
-CREATE OR REPLACE FUNCTION DeleteCommentFun() RETURNS TRIGGER AS
+CREATE OR REPLACE FUNCTION DeleteMovieFun() RETURNS TRIGGER AS
 $$
 	BEGIN
-		DELETE FROM Movies
-		WHERE Movies.movie_id = OLD.movie_id;
+		DELETE FROM Comments
+		WHERE Comments.movie_id = OLD.movie_id;
 		RETURN NEW;
 	END
 $$
 LANGUAGE plpgsql;
 
-CREATE TRIGGER DeleteCommentTrigger
-	AFTER DELETE ON Comments
+CREATE TRIGGER DeleteMovieTrigger
+	AFTER DELETE ON Movies
 		FOR EACH ROW
-			EXECUTE PROCEDURE  DeleteCommentFun();
+			EXECUTE PROCEDURE  DeleteMovieFun();
+
+
+CREATE OR REPLACE FUNCTION DeleteUserFun() RETURNS TRIGGER AS
+$$
+	BEGIN
+		DELETE FROM Comments
+		WHERE Comments.user_id = OLD.user_id;
+		RETURN NEW;
+	END
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER DeleteUserTrigger
+	AFTER DELETE ON Users
+		FOR EACH ROW
+			EXECUTE PROCEDURE  DeleteUserFun();
 
