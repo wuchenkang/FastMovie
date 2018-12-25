@@ -42,7 +42,7 @@ def movie(id):
         db.session.add(movie)
         db.session.commit()
         flash('评分成功')
-    rating = round(movie.total_score / movie.total_rating, 1) if movie.total_rating > 0 else 0
+    rating = round(movie.total_score / movie.total_rating, 1) if movie.total_rating > 0 else '暂无'
     page = request.args.get('page', 1, type=int)
     pagination = Comment.query.filter(Comment.movie_id == movie.id).order_by(Comment.timestamp.desc()).paginate(
         page, per_page=current_app.config['COMMENT_PER_PAGE'],

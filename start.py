@@ -18,7 +18,7 @@ def make_shell_context():
 
 @app.context_processor
 def my_base64():
-    return {'base64': base64, 'range': range, 'datetime':datetime, 'timedelta': timedelta}
+    return {'base64': base64, 'range': range, 'datetime':datetime, 'timedelta': timedelta, 'round': round}
 
 
 @app.cli.command()
