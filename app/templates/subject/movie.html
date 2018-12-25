@@ -21,17 +21,20 @@
             {% else %}
             <img class="img-rounded" src="{{ url_for('static', filename='movie.png') }}" width="100%"/>
             {% endif %}
-            <form method="post">
-                <input id="rating" name="rating" required class="rating-loading" data-size="sm"><br>
-                <button type="submit" class="btn btn-primary">评分</button>&nbsp;
-                <button type="reset" class="btn btn-default">取消</button>
-            </form>
+            <div style="text-align: center">
+                <form method="post">
+                    <input id="rating" name="rating" required class="rating-loading" value="{{ rating }}" data-size="sm" step="0.1"><br>
+                    <button type="submit" class="btn btn-primary">评分</button>&nbsp;
+                    <button type="reset" class="btn btn-default">取消</button>
+                </form>
+            </div>
         </div>
         <div class="col-md-8">
             <p><b>名称：</b>{{ movie.name }}</p>
             <p><b>上映日期：</b>{{ movie.date }}</p>
             <p><b>价格：</b>{{ movie.price }}</p>
             <p><b>导演：</b>{{ movie.director }}</p>
+            <p><b>评分：</b>{{ rating }}</p>
             <b>简介：</b>
             <p><textarea class="text-info" readonly
                          style="width:100%;height:150px; border:none; outline:none; cursor:default;">{{ movie.description }}</textarea>

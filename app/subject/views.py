@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from . import subject
 from .. import db
 from .forms import CreateCommentForm, CreateVoucherForm
-from ..models import Movie, User, Comment, Voucher
+from ..models import Movie, User, Comment, Voucher, Rating
 import random
 
 @subject.route('/movies')
@@ -20,17 +20,36 @@ def movies():
 
 @subject.route('/movie/<int:id>', methods=['GET', 'POST'])
 def movie(id):
+    movie = Movie.query.get_or_404(id)
     if request.method == 'POST':
         form = request.form
-        return form['rating']
-    movie = Movie.query.get_or_404(id)
+        rating = Rating()
+        rating.user_id = current_user.id
+        rating.movie_id = movie.id
+        rating.score = float(form['rating'])
+        record = Rating.query.filter(
+            Rating.movie_id == movie.id).filter(
+            Rating.user_id == current_user.id
+        ).first()
+        if record is None:
+            movie.total_rating += 1
+            movie.total_score += rating.score
+        else:
+            movie.total_score -= record.score
+            movie.total_score += rating.score
+            db.session.delete(record)
+        db.session.add(rating)
+        db.session.add(movie)
+        db.session.commit()
+        flash('评分成功')
+    rating = round(movie.total_score / movie.total_rating, 1) if movie.total_rating > 0 else 0
     page = request.args.get('page', 1, type=int)
     pagination = Comment.query.filter(Comment.movie_id == movie.id).order_by(Comment.timestamp.desc()).paginate(
         page, per_page=current_app.config['COMMENT_PER_PAGE'],
         error_out=False
     )
     comments = pagination.items
-    return render_template('subject/movie.html', movie=movie, comments=comments, pagination=pagination)
+    return render_template('subject/movie.html', movie=movie, rating=rating, comments=comments, pagination=pagination)
 
 
 @subject.route('/movie/comment/<int:id>/', methods=['GET', 'POST'])

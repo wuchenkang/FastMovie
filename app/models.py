@@ -96,6 +96,12 @@ class User(UserMixin, db.Model):
         cascade='all, delete',
         passive_deletes=True
     )
+    ratings = db.relationship(
+        'Rating', backref='user',
+        lazy='dynamic',
+        cascade='all, delete',
+        passive_deletes=True
+    )
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -215,6 +221,8 @@ class Movie(db.Model):
     picture = db.Column(db.LargeBinary)
     director = db.Column(db.String(64), default='未知')
     description = db.Column(db.Text, default='暂无。')
+    total_score = db.Column(db.Float, default=0)
+    total_rating = db.Column(db.Integer, default=0)
     comments = db.relationship(
         'Comment',
         backref='movie',
@@ -224,6 +232,13 @@ class Movie(db.Model):
     )
     vouchers = db.relationship(
         'Voucher',
+        backref='movie',
+        lazy='dynamic',
+        cascade='all, delete',
+        passive_deletes=True
+    )
+    ratings = db.relationship(
+        'Rating',
         backref='movie',
         lazy='dynamic',
         cascade='all, delete',
@@ -258,3 +273,11 @@ class Voucher(db.Model):
     receive_method = db.Column(db.String(64), default="线下收取")
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id', ondelete='CASCADE'))
+
+
+class Rating(db.Model):
+    __tablename__ = 'ratings'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id', ondelete='CASCADE'))
+    score = db.Column(db.Float, default=0)
