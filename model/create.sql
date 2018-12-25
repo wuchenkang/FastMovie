@@ -1,10 +1,14 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 9.x                               */
-/* Created on:     2018/12/24 22:59:17                          */
+/* Created on:     2018/12/25 22:14:10                          */
 /*==============================================================*/
 
 
-drop trigger DeleteMovieTriggle on Movies;
+drop trigger DeleteMovieTrigger on Movies;
+
+drop trigger InsertRatingTrigger on Ratings;
+
+drop trigger UpdateRatingTrigger on Ratings;
 
 drop trigger DeleteUserTrigger on Users;
 
@@ -19,6 +23,14 @@ drop table Comments;
 drop index Movies_PK;
 
 drop table Movies;
+
+drop index RatingMovie_FK;
+
+drop index RatingUser_FK;
+
+drop index Ratings_PK;
+
+drop table Ratings;
 
 drop index Roles_PK;
 
@@ -83,6 +95,8 @@ create table Movies (
    movie_picture        CHAR                 null,
    movie_director       VARCHAR(64)          null,
    movie_description    TEXT                 null,
+   total_rating         INT4                 null,
+   total_score          FLOAT8               null,
    constraint PK_MOVIES primary key (movie_id)
 );
 
@@ -90,6 +104,38 @@ create table Movies (
 /* Index: Movies_PK                                             */
 /*==============================================================*/
 create unique index Movies_PK on Movies (
+movie_id
+);
+
+/*==============================================================*/
+/* Table: Ratings                                               */
+/*==============================================================*/
+create table Ratings (
+   rating_id            INT4                 not null,
+   user_id              INT4                 not null,
+   movie_id             INT4                 not null,
+   score                FLOAT8               not null,
+   constraint PK_RATINGS primary key (rating_id)
+);
+
+/*==============================================================*/
+/* Index: Ratings_PK                                            */
+/*==============================================================*/
+create unique index Ratings_PK on Ratings (
+rating_id
+);
+
+/*==============================================================*/
+/* Index: RatingUser_FK                                         */
+/*==============================================================*/
+create  index RatingUser_FK on Ratings (
+user_id
+);
+
+/*==============================================================*/
+/* Index: RatingMovie_FK                                        */
+/*==============================================================*/
+create  index RatingMovie_FK on Ratings (
 movie_id
 );
 
@@ -150,7 +196,7 @@ role_id
 /*==============================================================*/
 create table Vouchers (
    voucher_id           INT4                 not null,
-   order_identify       VARCHAR(64)          null,
+   order_identify       VARCHAR(64)          not null,
    voucher_itimestamp   DATE                 null,
    voucher_ifreight     DECIMAL              null,
    payment_method       VARCHAR(64)          null,
@@ -191,6 +237,16 @@ alter table Comments
       references Users (user_id)
       on delete restrict on update restrict;
 
+alter table Ratings
+   add constraint FK_RATINGS_RATINGMOV_MOVIES foreign key (movie_id)
+      references Movies (movie_id)
+      on delete restrict on update restrict;
+
+alter table Ratings
+   add constraint FK_RATINGS_RATINGUSE_USERS foreign key (user_id)
+      references Users (user_id)
+      on delete restrict on update restrict;
+
 alter table Users
    add constraint FK_USERS_USERROLE_ROLES foreign key (role_id)
       references Roles (role_id)
@@ -213,6 +269,12 @@ $$
 		DELETE FROM Comments
 		WHERE Comments.movie_id = OLD.movie_id;
 		RETURN NEW;
+      DELETE FROM Ratings
+		WHERE Ratings.movie_id = OLD.movie_id;
+		RETURN NEW;
+      DELETE FROM Vouchers
+		WHERE Vouchers.movie_id = OLD.movie_id;
+		RETURN NEW;
 	END
 $$
 LANGUAGE plpgsql;
@@ -223,11 +285,57 @@ CREATE TRIGGER DeleteMovieTrigger
 			EXECUTE PROCEDURE  DeleteMovieFun();
 
 
+CREATE OR REPLACE FUNCTION InsertRatingFun() RETURNS TRIGGER AS
+$$
+	BEGIN
+        UPDATE Movies
+        SET Movies.total_rating = Movies.total_rating + 1
+        WHERE Movies.movie_id = NEW.movie_id;
+        
+        UPDATE Movies
+        SET Movies.total_score = Movies.total_score + NEW.score
+        WHERE Movies.movie_id = NEW.movie_id;
+	END
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER InsertRatingTrigger
+	BEFORE INSERT ON Ratings
+		FOR EACH ROW
+			EXECUTE PROCEDURE  InsertRatingFun();
+
+
+CREATE OR REPLACE FUNCTION UpdateRatingFun() RETURNS TRIGGER AS
+$$
+	BEGIN
+        UPDATE Movies
+        SET Movies.total_score = Movies.total_score - OLD.score
+        WHERE Movies.movie_id = OLD.movie_id;
+        
+        UPDATE Movies
+        SET Movies.total_score = Movies.total_score + NEW.score
+        WHERE Movies.movie_id = NEW.movie_id;
+	END
+$$
+LANGUAGE plpgsql;
+
+CREATE TRIGGER UpdateRatingTrigger
+	BEFORE INSERT ON Ratings
+		FOR EACH ROW
+			EXECUTE PROCEDURE  UpdateRatingFun();
+
+
 CREATE OR REPLACE FUNCTION DeleteUserFun() RETURNS TRIGGER AS
 $$
 	BEGIN
 		DELETE FROM Comments
 		WHERE Comments.user_id = OLD.user_id;
+		RETURN NEW;
+      DELETE FROM Ratings
+		WHERE Ratings.user_id = OLD.user_id;
+		RETURN NEW;
+      DELETE FROM Vouchers
+		WHERE Vouchers.user_id = OLD.user_id;
 		RETURN NEW;
 	END
 $$
