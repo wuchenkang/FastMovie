@@ -1,2 +1,1 @@
-// initialize with defaults
-$("#input-id").rating();
+$("#rating").rating();

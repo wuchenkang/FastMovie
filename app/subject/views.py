@@ -18,8 +18,11 @@ def movies():
     return render_template('subject/movies.html', movies=movies, pagination=pagination)
 
 
-@subject.route('/movie/<int:id>')
+@subject.route('/movie/<int:id>', methods=['GET', 'POST'])
 def movie(id):
+    if request.method == 'POST':
+        form = request.form
+        return form['rating']
     movie = Movie.query.get_or_404(id)
     page = request.args.get('page', 1, type=int)
     pagination = Comment.query.filter(Comment.movie_id == movie.id).order_by(Comment.timestamp.desc()).paginate(
