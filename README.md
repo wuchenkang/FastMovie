@@ -1,2 +1,2 @@
-# DatabaseSystemProject
-Database System Project. A simple movie website built with flask.
+# Fast Movie
+A simple movie disc selling platform built with flask.
