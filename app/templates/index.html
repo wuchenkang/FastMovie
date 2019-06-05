@@ -4,11 +4,12 @@
 
 {% block page_content %}
 <div class="page-header">
-    <h1>你好，{% if current_user.is_authenticated %}{{ current_user.username }}{% else %}游客{% endif %}!</h1>
+{#    <h1>你好，{% if current_user.is_authenticated %}{{ current_user.username }}{% else %}游客{% endif %}!</h1>#}
+    <h1>院线大片</h1>
 </div>
 <div class="container">
     <div class="row">
-        <div id="carouselMenu" class="carousel slide col-md-12">
+        <div id="carouselMenu" class="carousel slide">
             <ol class="carousel-indicators">
                 {% for i in range(num) %}
                     <li data-target="#carouselMenu" data-slide-to="{{ i }}" {% if i == 0 %}class="active"{% endif %}></li>
@@ -18,8 +19,22 @@
                 {% for i in range(num) %}
                 <div class="item {% if i == 0 %} active{% endif %}">
                 <a href="{{ url_for('subject.movie', id=movies[i].id) }}">
-                    <img width="100%" src="data:;base64,{{ base64.b64encode(movies[i].picture).decode('ascii') }}" alt=""/>
+                    <div class="col-md-8">
+                        <p><b>名称：</b>{{ movies[i].name }}</p>
+                        <p><b>上映日期：</b>{{ movies[i].date }}</p>
+                        <p><b>价格：</b>{{ movies[i].price }}</p>
+                        <p><b>导演：</b>{{ movies[i].director }}</p>
+                        <p><b>评分：</b>{{ round(movies[i].total_score / movies[i].total_rating, 1) if movies[i].total_rating > 0 else '2.5' }}</p>
+                        <b>简介：</b>
+                        <p>{{ movies[i].description }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="data:;base64,{{ base64.b64encode(movies[i].picture).decode('ascii') }}" alt=""/>
+                    </div>
                 </a>
+                </div>
+                <div class="col-md-8">
+
                 </div>
                 {% endfor %}
             </div>
@@ -35,13 +50,8 @@
 
 <script type="text/javascript">
     $(function(){
-        /*
-        * interval为每个轮播项之间的切换时间
-        * wrap定义是否循环轮播
-        *
-        * */
         $("#carouselMenu").carousel({
-            interval: 5000,
+            interval: 3000,
             wrap: true
         });
     })
