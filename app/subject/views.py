@@ -4,7 +4,9 @@ from . import subject
 from .. import db
 from .forms import CreateCommentForm, CreateVoucherForm
 from ..models import Movie, User, Comment, Voucher, Rating
-import random
+import random, time
+from .alipay import *
+
 
 @subject.route('/movies')
 def movies():
@@ -85,25 +87,41 @@ def buy(id):
     voucher = Voucher()
     voucher.movie = movie
     voucher.user = current_user
-    while True:
-        order_identify = ''
-        order_identify += chr(random.randint(1, 9) + ord('0'))
-        for i in range(17):
-            order_identify += chr(random.randint(0, 9) + ord('0'))
-        if not Voucher.query.filter(Voucher.order_identify == order_identify).first():
-            break
-    session['order_identify'] = order_identify
-    voucher.order_identify = order_identify
-    if form.validate_on_submit():
-        print(movie.price)
-        print(current_user.money)
-        if movie.price <= current_user.money:
-            voucher.order_identify = session['order_identify']
-            current_user.money -= movie.price
-            db.session.add(voucher)
-            db.session.commit()
-            flash("支付成功！花费{}元".format(movie.price))
-        else:
-            flash("余额不足，请充值。")
-        return redirect(url_for('subject.movie', id=id))
-    return render_template('subject/commodity.html', voucher=voucher, form=form)
+    # while True:
+    #     order_identify = ''
+    #     order_identify += chr(random.randint(1, 9) + ord('0'))
+    #     for i in range(17):
+    #         order_identify += chr(random.randint(0, 9) + ord('0'))
+    #     if not Voucher.query.filter(Voucher.order_identify == order_identify).first():
+    #         break
+    # session['order_identify'] = order_identify
+    # voucher.order_identify = order_identify
+    # if form.validate_on_submit():
+    #     print(movie.price)
+    #     print(current_user.money)
+    #     if movie.price <= current_user.money:
+    #         voucher.order_identify = session['order_identify']
+    #         current_user.money -= movie.price
+    #         db.session.add(voucher)
+    #         db.session.commit()
+    #         flash("支付成功！花费{}元".format(movie.price))
+    #     else:
+    #         flash("余额不足，请充值。")
+    #     return redirect(url_for('subject.movie', id=id))
+    # return render_template('subject/commodity.html', voucher=voucher, form=form)
+    if request.method == "GET":
+        return render_template('subject/commodity.html', voucher=voucher, form=form)
+    else:
+        form = request.form
+        money = float(form['money'])
+        alipay = ali()
+        # 生成支付的url
+        query_params = alipay.direct_pay(
+            subject="充气式韩红",  # 商品简单描述
+            out_trade_no="x2" + str(time.time()),  # 商户订单号
+            total_amount=money,  # 交易金额(单位: 元 保留俩位小数)
+        )
+
+        pay_url = "https://openapi.alipaydev.com/gateway.do?{0}".format(query_params)
+
+        return redirect(pay_url)
