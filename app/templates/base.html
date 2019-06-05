@@ -32,7 +32,7 @@
                 <li><a href="{{ url_for('subject.movies') }}">电影</a></li>
                 <li><a href="{{ url_for('search.search', name='', director='', year='全部年份') }}">分类</a></li>
             </ul>
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav searchbar">
                 <li>
                     <form class="navbar-search" method="get" action={{ url_for('search.search') }}>
                         <input type="text" class="input search-query" id="name" name="name" value="">

@@ -1,6 +1,5 @@
 from flask import render_template, request, current_app
 from sqlalchemy import and_, or_, extract
-import jieba
 from . import search
 from ..models import Movie
 

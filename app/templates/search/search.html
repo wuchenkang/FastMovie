@@ -9,24 +9,26 @@
 
 {% block page_content %}
 <div class="col-md-12 page-header" id="page-header">
-    <div class="col-md-4">
-        <form class="search" method="get">
-            <label for="name">电影名称</label>
-            <input type="text" class="input form-control" id="name" name="name" value="{{ name }}" placeholder="电影名称">
-            <label for="name">导演</label>
-            <input type="text" class="input form-control" id="director" name="director" value="{{ director }}" placeholder="导演名称">
-            <label for="name">上映年份</label>
-            <select class="form-control" id="year" name="year" value="{{ year }}" placehoder="上映年份">
-                <option>全部年份</option>
-                <option>2019</option>
-                <option>2018</option>
-                <option>2017</option>
-                <option>2016-2011</option>
-                <option>2010-2001</option>
-                <option>更早</option>
-            </select>
-            <button type="submit" class="btn"><i class="icon-search"></i>搜索</button>
-        </form>
+    <div class="box">
+        <div class="col-md-4" style="width: 100%;">
+            <form class="search" method="get">
+                <label for="name">电影名称</label>
+                <input type="text" class="input form-control" id="name" name="name" value="{{ name }}" placeholder="电影名称">
+                <label for="name">导演</label>
+                <input type="text" class="input form-control" id="director" name="director" value="{{ director }}" placeholder="导演名称">
+                <label for="name">上映年份</label>
+                <select class="form-control" id="year" name="year" value="{{ year }}" placehoder="上映年份">
+                    <option>全部年份</option>
+                    <option>2019</option>
+                    <option>2018</option>
+                    <option>2017</option>
+                    <option>2016-2011</option>
+                    <option>2010-2001</option>
+                    <option>更早</option>
+                </select>
+                <button type="submit" class="btn"><i class="icon-search"></i>搜索</button>
+            </form>
+        </div>
     </div>
 </div>
 
