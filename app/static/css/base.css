@@ -58,3 +58,16 @@ body{
 .searchbar{
     margin-top: 10px;
 }
+
+
+.carousel-control.left {
+       background-image:none;
+       background-repeat: repeat-x;
+       filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#00000000', GradientType=1);
+}
+.carousel-control.right {
+      left: auto; right: 0;
+      background-image:none;
+      background-repeat: repeat-x;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#80000000', GradientType=1);
+}

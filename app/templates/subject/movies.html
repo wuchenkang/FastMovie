@@ -27,7 +27,7 @@
             名称：{{ movie.name }}<br/>
             导演：{{ movie.director }}<br/>
             价格：￥{{ movie.price }}<br/>
-            评分：{{ round(movie.total_score / movie.total_rating, 1) if movie.total_rating > 0 else '暂无' }}
+            评分：{{ round(movie.total_score / movie.total_rating, 1) if movie.total_rating > 0 else '2.5' }}
         </div>
     </div>
     {% endfor %}

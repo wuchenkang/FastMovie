@@ -6,8 +6,44 @@
 <div class="page-header">
     <h1>你好，{% if current_user.is_authenticated %}{{ current_user.username }}{% else %}游客{% endif %}!</h1>
 </div>
-<div class="col-md-12">
-    <p>欢迎来到<b>迅影</b>。</p>
-    <p>卖影碟啦，三元一张，十元三张！</p>
+<div class="container">
+    <div class="row">
+        <div id="carouselMenu" class="carousel slide col-md-12">
+            <ol class="carousel-indicators">
+                {% for i in range(num) %}
+                    <li data-target="#carouselMenu" data-slide-to="{{ i }}" {% if i == 0 %}class="active"{% endif %}></li>
+                {% endfor %}
+            </ol>
+            <div class="carousel-inner">
+                {% for i in range(num) %}
+                <div class="item {% if i == 0 %} active{% endif %}">
+                <a href="{{ url_for('subject.movie', id=movies[i].id) }}">
+                    <img width="100%" src="data:;base64,{{ base64.b64encode(movies[i].picture).decode('ascii') }}" alt=""/>
+                </a>
+                </div>
+                {% endfor %}
+            </div>
+            <a class="carousel-control left" href="#carouselMenu" data-slide="prev">‹</a>
+            <a class="carousel-control right" href="#carouselMenu" data-slide="next">›</a>
+        </div>
+    </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<script type="text/javascript">
+    $(function(){
+        /*
+        * interval为每个轮播项之间的切换时间
+        * wrap定义是否循环轮播
+        *
+        * */
+        $("#carouselMenu").carousel({
+            interval: 5000,
+            wrap: true
+        });
+    })
+</script>
 {% endblock %}
