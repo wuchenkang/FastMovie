@@ -17,6 +17,7 @@ class Config:
     ITEM_PER_PAGE = 12
     COMMENT_PER_PAGE = 8
 
+
     @staticmethod
     def init_app(app):
         pass

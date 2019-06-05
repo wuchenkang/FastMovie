@@ -29,9 +29,17 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="{{ url_for('main.index') }}">主页</a></li>
+                <li><a href="{{ url_for('subject.movies') }}">电影</a></li>
             </ul>
             <ul class="nav navbar-nav">
-                <li><a href="{{ url_for('subject.movies') }}">电影</a></li>
+                <li>
+                    <form class="navbar-search" method="get" action={{ url_for('search.search') }}>
+                        <input type="text" class="input search-query" id="name" name="name" value="">
+                        <input style="display: none" type="text" class="input search-query" id="director" name="director" value="">
+                        <input style="display: none" type="text" class="input search-query" id="year" name="year", value="全部年份">
+                        <button type="submit" class="btn"><i class="icon-search"></i>搜索</button>
+                    </form>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
@@ -58,7 +66,7 @@
                         <li><a href="{{ url_for('auth.logout') }}">登出</a></li>
                     </ul>
                 </li>
-                {% if current_user.is_administrator() %}
+                    {% if current_user.is_administrator() %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 管理 <b class="caret"></b>

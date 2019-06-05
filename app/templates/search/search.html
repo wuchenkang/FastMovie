@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "pagination.html" as macros %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/movie.css') }}">
+{% endblock %}
+{% block title %}搜索结果{% endblock %}
+
+{% block page_content %}
+<div class="col-md-12 page-header" id="page-header">
+    <div class="col-md-4">
+        <form class="search" method="get">
+            <label for="name">电影名称</label>
+            <input type="text" class="input form-control" id="name" name="name" value="{{ name }}" placeholder="电影名称">
+            <label for="name">导演</label>
+            <input type="text" class="input form-control" id="director" name="director" value="{{ director }}" placeholder="导演名称">
+            <label for="name">上映年份</label>
+            <select class="form-control" id="year" name="year" value="{{ year }}" placehoder="上映年份">
+                <option>全部年份</option>
+                <option>2019</option>
+                <option>2018</option>
+                <option>2017</option>
+                <option>2016-2011</option>
+                <option>2010-2001</option>
+                <option>更早</option>
+            </select>
+            <button type="submit" class="btn"><i class="icon-search"></i>搜索</button>
+        </form>
+    </div>
+</div>
+
+{% for row in movies|batch(4) %}
+<div class="row">
+    {% for movie in row %}
+    <div class="col-md-3 movie">
+        <a href="{{ url_for("subject.movie", id=movie.id) }}" target ="_blank">
+        {% if movie.picture %}
+        <img class="img-rounded" src="data:;base64,{{ base64.b64encode(movie.picture).decode('ascii') }}" width="100%"/>
+        {% else %}
+        <img class="img-rounded" src="{{ url_for('static', filename='movie.png') }}" width="100%"/>
+        {% endif %}
+        </a>
+        <div class="movie-content">
+            名称：{{ movie.name }}<br/>
+            导演：{{ movie.director }}<br/>
+            价格：￥{{ movie.price }}<br/>
+            评分：{{ round(movie.total_score / movie.total_rating, 1) if movie.total_rating > 0 else '暂无' }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}
+{% if pagination %}
+<div style="text-align: center;">
+    <div class="pagination">
+        {{ macros.pagination_widget(pagination, '.movies') }}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

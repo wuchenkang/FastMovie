@@ -41,4 +41,7 @@ def create_app(config_name):
     from .subject import subject as movie_blueprint
     app.register_blueprint(movie_blueprint, url_prefix='/subject')
 
+    from .search import search as search_blueprint
+    app.register_blueprint(search_blueprint, url_prefix='/search')
+
     return app
