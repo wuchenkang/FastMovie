@@ -17,14 +17,14 @@
                 <label for="name">导演</label>
                 <input type="text" class="input form-control" id="director" name="director" value="{{ director }}" placeholder="导演名称">
                 <label for="name">上映年份</label>
-                <select class="form-control" id="year" name="year" value="{{ year }}" placehoder="上映年份">
-                    <option>全部年份</option>
-                    <option>2019</option>
-                    <option>2018</option>
-                    <option>2017</option>
-                    <option>2016-2011</option>
-                    <option>2010-2001</option>
-                    <option>更早</option>
+                <select class="form-control" id="year" name="year" placehoder="上映年份">
+                    <option {% if year == "全部年份"%}selected="selected"{% endif %}>全部年份</option>
+                    <option {% if year == "2019"%}selected="selected"{% endif %}>2019</option>
+                    <option {% if year == "2018"%}selected="selected"{% endif %}>2018</option>
+                    <option {% if year == "2017"%}selected="selected"{% endif %}>2017</option>
+                    <option {% if year == "2016-2011"%}selected="selected"{% endif %}>2016-2011</option>
+                    <option {% if year == "2010-2001"%}selected="selected"{% endif %}>2010-2001</option>
+                    <option {% if year == "更早"%}selected="selected"{% endif %}>更早</option>
                 </select>
                 <button type="submit" class="btn"><i class="icon-search"></i>搜索</button>
             </form>
