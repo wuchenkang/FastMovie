@@ -39,4 +39,4 @@ def search():
         error_out=False
     )
     movies = pagination.items
-    return render_template('search/search.html', movies=movies, name=name, director=director, year=year)
+    return render_template('search/search.html', movies=movies, name=name, director=director, year=year, pagination=pagination)
