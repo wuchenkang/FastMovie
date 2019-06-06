@@ -2,9 +2,9 @@ from flask import render_template, redirect, request, url_for, flash, current_ap
 from flask_login import login_required, current_user
 from . import subject
 from .. import db
-from .forms import CreateCommentForm, CreateVoucherForm
+from .forms import CreateCommentForm
 from ..models import Movie, User, Comment, Voucher, Rating
-import random, time
+import random
 from .alipay import *
 
 
@@ -82,11 +82,7 @@ def comment(id):
 @subject.route('/movie/commodity/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def buy(id):
-    form = CreateVoucherForm()
     movie = Movie.query.get_or_404(id)
-    voucher = Voucher()
-    voucher.movie = movie
-    voucher.user = current_user
     while True:
         order_identify = ''
         order_identify += chr(random.randint(1, 9) + ord('0'))
@@ -94,6 +90,9 @@ def buy(id):
             order_identify += chr(random.randint(0, 9) + ord('0'))
         if not Voucher.query.filter(Voucher.order_identify == order_identify).first():
             break
+    order_identify += 'x' + str(id)
+    session['id'] = id
+    session['order_identify'] = order_identify
 
     alipay = ali()
     # 生成支付的url
@@ -112,28 +111,20 @@ def buy(id):
 @subject.route('/movie/commodity/result/', methods=['GET'])
 @login_required
 def buy_result():
-    # session['order_identify'] = order_identify
-    # voucher.order_identify = order_identify
-    # if form.validate_on_submit():
-    #     print(movie.price)
-    #     print(current_user.money)
-    #     if movie.price <= current_user.money:
-    #         voucher.order_identify = session['order_identify']
-    #         current_user.money -= movie.price
-    #         db.session.add(voucher)
-    #         db.session.commit()
-    #         flash("支付成功！花费{}元".format(movie.price))
-    #     else:
-    #         flash("余额不足，请充值。")
-    #     return redirect(url_for('subject.movie', id=id))
-    # return render_template('subject/commodity.html', voucher=voucher, form=form)
+    voucher = Voucher()
+    out_trade_no = request.args.get('out_trade_no')
+    id = int(out_trade_no[out_trade_no.find('x') + 1:])
+    movie = Movie.query.get_or_404(id)
 
-    # params = request.GET.dict()
-    # sign = params.pop('sign', None)
-    # status = alipay.verify(params, sign)
-    print('\n********************************GET验证', request)
-    # return HttpResponse('支付成功')
-    input()
+    voucher.movie = movie
+    voucher.user = current_user
+    voucher.order_identify = out_trade_no
+    db.session.add(voucher)
+    db.session.commit()
+
+    flash("支付成功！花费{}元".format(movie.price))
+
+    return render_template('subject/commodity.html', voucher=voucher)
 
 
 @subject.route('/movie/commodity/notify/', methods=['POST', 'GET'])
@@ -142,15 +133,16 @@ def buy_notify():
     # 检测是否支付成功
     # 去请求体中获取所有返回的数据：状态/订单号
     from urllib.parse import parse_qs
-    body_str = request.body.decode('utf-8')
-    post_data = parse_qs(body_str)
 
-    post_dict = {}
-    for k, v in post_data.items():
-        post_dict[k] = v[0]
-    print(post_dict)
+    # body_str = request.body.decode('utf-8')
+    # post_data = parse_qs(body_str)
+    #
+    # post_dict = {}
+    # for k, v in post_data.items():
+    #     post_dict[k] = v[0]
+    # print(post_dict)
 
-    sign = post_dict.pop('sign', None)
-    status = alipay.verify(post_dict, sign)
-    print('\n**************************POST验证', post_dict)
+    # sign = post_dict.pop('sign', None)
+    # status = alipay.verify(post_dict, sign)
+    print('\n**************************POST验证\n', request.data, request.content_encoding)
     return 'success'

@@ -86,3 +86,10 @@ def order():
     )
     vouchers = pagination.items
     return render_template("user/order.html", vouchers=vouchers, pagination=pagination)
+
+
+@user.route('/order_detail/<string:order_identify>/', methods=['GET'])
+@login_required
+def order_detail(order_identify):
+    voucher = Voucher.query.filter(Voucher.order_identify == order_identify).first()
+    return render_template('subject/commodity.html', voucher=voucher)

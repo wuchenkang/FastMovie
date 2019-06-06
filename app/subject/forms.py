@@ -10,7 +10,3 @@ class CreateCommentForm(FlaskForm):
 
     def __init__(self, *args, **kwargs):
         super(CreateCommentForm, self).__init__(*args, **kwargs)
-
-
-class CreateVoucherForm(FlaskForm):
-    submit = SubmitField('确认支付', render_kw={'id': 'submit'})

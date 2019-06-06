@@ -32,11 +32,7 @@
         <p><b>创建时间：</b>{{ (voucher.timestamp+timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S") }}</p>
     </div>
     <div style="text-align:center;">
-        {{ wtf.quick_form(form) }}
+        <button class="btn btn-success" style="margin:0 auto;" onclick="javascript:history.back(-1);">返回</button>
     </div>
 </div>
-<form action="{{ url_for('subject.buy', id=voucher.movie.id) }}" method="POST">
-    <input type="text" name="money">
-    <input type="submit" value="去支付" />
-</form>
 {% endblock %}

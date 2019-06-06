@@ -24,7 +24,11 @@
         </tr>
         {% for voucher in vouchers %}
         <tr>
-            <td>{{ voucher.order_identify }}</td>
+            <td>
+                <a href="{{ url_for('user.order_detail', order_identify=voucher.order_identify) }}">
+                    {{ voucher.order_identify }}
+                </a>
+            </td>
             <td>{{ voucher.timestamp }}</td>
             <td>{{ voucher.freight }}</td>
             <td>{{ voucher.payment_method }}</td>

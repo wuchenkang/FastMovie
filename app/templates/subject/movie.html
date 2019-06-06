@@ -42,7 +42,7 @@
         </div>
     </div>
     <div style="text-align:center;">
-        <button class="btn btn-success" style="margin:0 auto;" onclick= "javascript:window.location.href='{{ url_for('subject.buy', id=movie.id) }}';">购买</button>
+        <button class="btn btn-success" style="margin:0 auto;" onclick= "javascript:window.open('{{ url_for('subject.buy', id=movie.id) }}');">购买</button>
     </div>
     <hr>
     {% if comments %}
