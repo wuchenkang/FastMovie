@@ -27,11 +27,9 @@ class AliPay(object):
         self.return_url = return_url
         with open("app/subject/" + self.app_private_key_path) as fp:
             self.app_private_key = RSA.importKey(fp.read())
-
         self.alipay_public_key_path = alipay_public_key_path
         with open("app/subject/" + self.alipay_public_key_path) as fp:
             self.alipay_public_key = RSA.import_key(fp.read())
-
         if debug is True:
             self.__gateway = "https://openapi.alipaydev.com/gateway.do"
         else:

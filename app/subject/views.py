@@ -5,7 +5,9 @@ from .. import db
 from .forms import CreateCommentForm
 from ..models import Movie, User, Comment, Voucher, Rating
 import random
-from .alipay import *
+from .myalipay import *
+from alipay import AliPay
+
 
 
 @subject.route('/movies')
