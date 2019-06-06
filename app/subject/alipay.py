@@ -128,11 +128,11 @@ def ali():
     # 根据自己申请的进行设置
     alipay = AliPay(
         appid="2016093000629449",  # 设置签约的appid
-        app_notify_url="http://172.26.43.209/notify/",  # 异步支付通知url
+        app_notify_url="http://172.19.28.175:8000/subject/movie/commodity/notify/",  # 异步支付通知url
         app_private_key_path=app_private_key_path,  # 设置应用私钥
         alipay_public_key_path=alipay_public_key_path,  # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
         debug=True,  # 默认False,            # 设置是否是沙箱环境，True是沙箱环境
-        return_url="http://172.26.43.209/result/",  # 同步支付通知url,在这个页面可以展示给用户看，只有付款成功后才会跳转
+        return_url="http://172.19.28.175:8000/subject/movie/commodity/result/",  # 同步支付通知url,在这个页面可以展示给用户看，只有付款成功后才会跳转
     )
 
     return alipay
