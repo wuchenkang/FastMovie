@@ -13,10 +13,10 @@
 </div>
 
 <div class="box" style="text-align: center;">
-    {% for item in current_items %}
+    {% for i in range(current_items.size()) %}
     <div class="row">
         <div class="col-md-4" >
-            {% if item.movie.picture %}
+            {% if item.picture %}
             <img class="img-rounded" src="data:;base64,{{ base64.b64encode(item.movie.picture).decode('ascii') }}"
                  width="100%"/>
             {% else %}
@@ -24,9 +24,9 @@
             {% endif %}
         </div>
         <div class="col-md-8">
-            <p><b>商品名称：</b>{{ item.movie.name }}</p>
-            <p><b>单价：</b>{{ item.movie.price }}</p>
-            <p><b>数量：</b>{{ item.movie_count }}</p>
+            <p><b>商品名称：</b>{{ current_items[i].name }}</p>
+            <p><b>单价：</b>{{ current_items[i].price }}</p>
+            <p><b>数量：</b>{{ movie_count[i] }}</p>
         </div>
     </div>
     <hr />

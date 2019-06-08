@@ -103,7 +103,7 @@ def submit():
         out_trade_no=order_identify,
         total_amount=float(money),
         subject=name,
-        return_url="http://172.26.43.209:8000/trolley/commodities/result/"
+        return_url="http://127.0.0.1:5000/trolley/commodities/result/"
     )
 
     pay_url = "https://openapi.alipaydev.com/gateway.do?{0}".format(query_params)
@@ -120,16 +120,18 @@ def buy_result():
     voucher.is_pay = True
     db.session.commit()
 
-    tro = Trolley.query.filter(Trolley.user_id==current_user.id).all()
+    current_items = []
+    movie_count = []
+    ids = list(map(lambda x: int(x), voucher.name.split()))
+    for id in ids:
+        item = Trolley.query.filter(Trolley.id == id).first()
+        current_items.append(item.movie)
+        movie_count.append(item.movie_count)
+    flash("支付成功！花费{}元".format(voucher.total_money))
+
+    tro = Trolley.query.filter(Trolley.user_id == current_user.id).all()
     for item in tro:
         db.session.delete(item)
     db.session.commit()
 
-    current_items = []
-    ids = list(map(lambda x: int(x), voucher.name.split()))
-    for id in ids:
-        item = Trolley.query.filter(Trolley.id == id).first()
-        current_items.append(item)
-    flash("支付成功！花费{}元".format(voucher.total_money))
-
-    return render_template('trolley/commodities.html', current_items=current_items, voucher=voucher)
+    return render_template('trolley/commodities.html', current_items=current_items, voucher=voucher, movie_count=movie_count)

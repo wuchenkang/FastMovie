@@ -125,7 +125,7 @@ def buy(id):
             out_trade_no=order_identify,
             total_amount=float(movie.price),
             subject=movie.name,
-            return_url="http://172.26.43.209:8000/subject/movie/commodity/result/"
+            return_url="http://127.0.0.1:5000/subject/movie/commodity/result/"
         )
 
         pay_url = "https://openapi.alipaydev.com/gateway.do?{0}".format(query_params)
