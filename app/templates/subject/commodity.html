@@ -24,15 +24,18 @@
         <p><b>商品名称：</b>{{ voucher.movie.name }}</p>
         <p><b>价格：</b>{{ voucher.movie.price }}</p>
         <p><b>支付方式：</b>{{ voucher.payment_method }}</p>
+        <p><b>支付状态：</b>{% if voucher.is_pay %}已支付{% else %}待支付{% endif %}</p>
         <p><b>运费：</b>{{ voucher.freight }}</p>
+        <p><b>发货状态：</b>{% if voucher.is_send %}已发货{% else %}待发货{% endif %}</p>
         <p><b>收货人：</b>{{ voucher.user.name }}</p>
         <p><b>收货方式：</b>{{ voucher.receive_method }}</p>
         <p><b>发货人：</b>迅影</p>
         <p><b>订单编号：</b>{{ voucher.order_identify }}</p>
         <p><b>创建时间：</b>{{ (voucher.timestamp+timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S") }}</p>
+        <p><b>退款状态：</b>{% if voucher.is_refund == 0 %}无{% elif voucher.is_refund == 1 %}正在退款{% else %}已退款{% endif %}</p>
     </div>
     <div style="text-align:center;">
-        <button class="btn btn-success" style="margin:0 auto;" onclick="javascript:history.back(-1);">返回</button>
+        <button class="btn btn-success" style="margin:0 auto;" onclick="javascript:window.location.href = '{{ url_for('user.refund', order_identify=voucher.order_identify) }}';">申请退款</button>
     </div>
 </div>
 {% endblock %}

@@ -93,3 +93,16 @@ def order():
 def order_detail(order_identify):
     voucher = Voucher.query.filter(Voucher.order_identify == order_identify).first()
     return render_template('subject/commodity.html', voucher=voucher)
+
+
+@user.route('/refund/<string:order_identify>/', methods=['GET'])
+@login_required
+def refund(order_identify):
+    voucher = Voucher.query.filter(Voucher.order_identify == order_identify).first()
+    if voucher.is_refund:
+        flash("该订单已经申请退款！")
+    else:
+        voucher.is_refund = True
+        db.session.commit()
+        flash("申请退款成功！")
+    return render_template('subject/commodity.html', voucher=voucher)

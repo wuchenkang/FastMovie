@@ -119,6 +119,7 @@ def buy_result():
     voucher.movie = movie
     voucher.user = current_user
     voucher.order_identify = out_trade_no
+    voucher.is_pay = True
     db.session.add(voucher)
     db.session.commit()
 

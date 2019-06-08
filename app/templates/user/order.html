@@ -25,7 +25,7 @@
         {% for voucher in vouchers %}
         <tr>
             <td>
-                <a href="{{ url_for('user.order_detail', order_identify=voucher.order_identify) }}">
+                <a target="_blank" href="{{ url_for('user.order_detail', order_identify=voucher.order_identify) }}">
                     {{ voucher.order_identify }}
                 </a>
             </td>
