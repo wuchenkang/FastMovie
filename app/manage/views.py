@@ -5,7 +5,6 @@ from .forms import EditMovieForm, CreateMovieForm
 from .. import db
 from ..decorators import admin_required
 from ..models import Movie, Comment
-import base64
 
 
 @manage.route('/manage-movies', methods=['GET', 'POST'])

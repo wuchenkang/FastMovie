@@ -2,13 +2,14 @@ import os
 from flask_migrate import Migrate
 from app import create_app, db
 from app.models import User, Role, Permission
+from app.whole import get_trolley
 import base64
 from datetime import datetime, timedelta
 
 
 app = create_app(os.getenv('CONFIG') or 'default')
 migrate = Migrate(app, db)
-
+app.add_template_global(get_trolley, 'get_trolley')
 
 @app.shell_context_processor
 def make_shell_context():

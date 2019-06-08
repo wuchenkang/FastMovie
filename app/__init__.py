@@ -44,4 +44,7 @@ def create_app(config_name):
     from .search import search as search_blueprint
     app.register_blueprint(search_blueprint, url_prefix='/search')
 
+    from .trolley import trolley as trolley_blueprint
+    app.register_blueprint(trolley_blueprint, url_prefix='/trolley')
+
     return app

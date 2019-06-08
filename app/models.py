@@ -275,3 +275,13 @@ class Rating(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id', ondelete='CASCADE'))
     score = db.Column(db.Float, default=0)
+
+
+class Trolley(db.Model):
+    __tabllename__ = 'trolleys'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id', ondelete='CASCADE'))
+    movie_name = db.Column(db.String)
+    movie_price = db.Column(db.Numeric(16, 2));
+    movie_count = db.Column(db.Integer, default=0);

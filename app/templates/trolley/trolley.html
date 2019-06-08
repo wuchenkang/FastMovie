@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "pagination.html" as macros %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/manage.css') }}">
+{% endblock %}
+{% block title %}购物车{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>购物车</h1>
+</div>
+
+<div class="box1">
+    <div class="col-md-12">
+        <table class="table" id="trolley-main">
+            <tr>
+                <td>编号</td>
+                <td>名称</td>
+                <td>单价</td>
+                <td>数量</td>
+            </tr>
+            {% for item in items %}
+                <script>
+                    newItem("trolley-main", {{item.movie_id}}, "{{item.movie_name}}", {{item.movie_price}}, {{item.movie_count}}, 1);
+                </script>
+            {% endfor %}
+        </table>
+        {% if pagination %}
+        <div style="text-align: center;">
+            <div class="pagination">
+                {{ macros.pagination_widget(pagination, '.manage_movies') }}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
