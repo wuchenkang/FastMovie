@@ -32,7 +32,7 @@
         <p><b>发货人：</b>迅影</p>
         <p><b>订单编号：</b>{{ voucher.order_identify }}</p>
         <p><b>创建时间：</b>{{ (voucher.timestamp+timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S") }}</p>
-        <p><b>退款状态：</b>{% if voucher.is_refund == 0 %}无{% elif voucher.is_refund == 1 %}正在退款{% else %}已退款{% endif %}</p>
+        <p><b>退款状态：</b>{% if voucher.is_refund == 0 %}无{% elif voucher.is_refund == 1 %}正在退款{% else %}<span style="color:red">已退款</span>{% endif %}</p>
     </div>
     <div style="text-align:center;">
         {% if current_user.is_administrator() %}

@@ -74,9 +74,6 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <button onclick="newItem(1, 'Test', 23.3, 3)" >Click Me</button>
-                        </li>
-                        <li>
                             <table class="table" id="trolley-navbar">
                                 <tr>
                                     <td>编号</td>
@@ -85,6 +82,9 @@
                                     <td>数量</td>
                                 </tr>
                             </table>
+                        </li>
+                        <li style="text-align:center;">
+                            <button type="button" class="btn btn-success" onclick="javascript:window.open('{{ url_for('trolley.view_trolley') }}');">进入购物车</button>
                         </li>
                     </ul>
                     {% for item in get_trolley() %}

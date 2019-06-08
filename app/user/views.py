@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from . import user
 from .forms import EditProfileForm, EditProfileAdminForm, CreateMoneyForm
 from .. import db
-from ..models import Role, User, Voucher
+from ..models import Role, User, Voucher, Trolley
 from ..decorators import admin_required
 import base64
 from alipay import AliPay
@@ -99,7 +99,15 @@ def order():
 @login_required
 def order_detail(order_identify):
     voucher = Voucher.query.filter(Voucher.order_identify == order_identify).first()
-    return render_template('subject/commodity.html', voucher=voucher)
+    if voucher.multiply_commodities:
+        current_items = []
+        ids = list(map(lambda x: int(x), voucher.name.split()))
+        for id in ids:
+            item = Trolley.query.filter(Trolley.id == id).first()
+            current_items.append(item)
+        return render_template('trolley/commodities.html', current_items=current_items, voucher=voucher)
+    else:
+        return render_template('subject/commodity.html', voucher=voucher)
 
 
 @user.route('/refund/<string:order_identify>/', methods=['GET'])
@@ -116,7 +124,15 @@ def refund(order_identify):
         flash("该订单已经申请退款！")
     elif voucher.is_refund == 2:
         flash("该订单已经退款！")
-    return render_template('subject/commodity.html', voucher=voucher)
+    if voucher.multiply_commodities:
+        current_items = []
+        ids = list(map(lambda x: int(x), voucher.name.split()))
+        for id in ids:
+            item = Trolley.query.filter(Trolley.id == id).first()
+            current_items.append(item)
+        return render_template('trolley/commodities.html', current_items=current_items, voucher=voucher)
+    else:
+        return render_template('subject/commodity.html', voucher=voucher)
 
 
 @user.route('/admin_refund/<string:order_identify>', methods=['GET', 'POST'])
@@ -151,8 +167,15 @@ def admin_refund(order_identify):
             flash("退款成功")
         else:
             flash("退款失败")
-
-    return render_template('subject/commodity.html', voucher=voucher)
+    if voucher.multiply_commodities:
+        current_items = []
+        ids = list(map(lambda x: int(x), voucher.name.split()))
+        for id in ids:
+            item = Trolley.query.filter(Trolley.id == id).first()
+            current_items.append(item)
+        return render_template('trolley/commodities.html', current_items=current_items, voucher=voucher)
+    else:
+        return render_template('subject/commodity.html', voucher=voucher)
 
 
 @user.route('/admin_send/<string:order_identify>', methods=['GET', 'POST'])
@@ -164,4 +187,12 @@ def admin_send(order_identify):
         voucher.is_send = True
         db.session.commit()
         flash("确认发货！")
-    return render_template('subject/commodity.html', voucher=voucher)
+    if voucher.multiply_commodities:
+        current_items = []
+        ids = list(map(lambda x: int(x), voucher.name.split()))
+        for id in ids:
+            item = Trolley.query.filter(Trolley.id == id).first()
+            current_items.append(item)
+        return render_template('trolley/commodities.html', current_items=current_items, voucher=voucher)
+    else:
+        return render_template('subject/commodity.html', voucher=voucher)

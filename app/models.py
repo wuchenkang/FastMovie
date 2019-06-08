@@ -234,7 +234,13 @@ class Movie(db.Model):
         cascade='all, delete',
         passive_deletes=True
     )
-
+    trolleys = db.relationship(
+        'Trolley',
+        backref='movie',
+        lazy='dynamic',
+        cascade='all, delete',
+        passive_deletes=True
+    )
 
 login_manager.anonymous_user = AnonymousUser
 
@@ -266,9 +272,10 @@ class Voucher(db.Model):
     is_send = db.Column(db.Boolean, default=False)
     total_money = db.Column(db.Float, default=0)
     is_refund = db.Column(db.Integer, default=0)    # 0 表示未申请退款; 1 表示征在申请退款; 2表示已退款
+    name = db.Column(db.String(64), default='')
+    multiply_commodities = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id', ondelete='CASCADE'))
-
 
 class Rating(db.Model):
     __tablename__ = 'ratings'
@@ -284,5 +291,5 @@ class Trolley(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id', ondelete='CASCADE'))
     movie_name = db.Column(db.String)
-    movie_price = db.Column(db.Numeric(16, 2));
-    movie_count = db.Column(db.Integer, default=0);
+    movie_price = db.Column(db.Numeric(16, 2))
+    movie_count = db.Column(db.Integer, default=0)

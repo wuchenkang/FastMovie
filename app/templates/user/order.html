@@ -28,22 +28,32 @@
         {% for voucher in vouchers %}
         <tr>
             <td>
+                {% if voucher.multiply_commodities %}
                 <a target="_blank" href="{{ url_for('user.order_detail', order_identify=voucher.order_identify) }}">
                     {{ voucher.order_identify }}
                 </a>
+                {% else %}
+                <a target="_blank" href="{{ url_for('user.order_detail', order_identify=voucher.order_identify) }}">
+                    {{ voucher.order_identify }}
+                </a>
+                {% endif %}
             </td>
             <td>{{ (voucher.timestamp+timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S") }}</td>
             <td>{{ voucher.freight }}</td>
             <td>{{ voucher.payment_method }}</td>
             <td>{{ voucher.receive_method }}</td>
             <td>
+                {% if voucher.multiply_commodities %}
+                ---
+                {% else %}
                 <a href="{{ url_for('subject.movie', id=voucher.movie.id) }}">
                     {{ voucher.movie.name }}
                 </a>
+                {% endif %}
             </td>
-            <td>{{ voucher.movie.price }}</td>
+            <td>{{ voucher.total_money }}</td>
             <td>
-                {% if voucher.is_refund == 0 %}无{% elif voucher.is_refund == 1 %}正在退款{% else %}已退款{% endif %}
+                {% if voucher.is_refund == 0 %}无{% elif voucher.is_refund == 1 %}正在退款{% else %}<span style="color:red">已退款</span>{% endif %}
                 {% if current_user.is_administrator() %}
                     {% if voucher.is_refund == 1 %}
                         <button class="btn-xs btn-warning" style="margin:0 auto;" onclick="javascript:window.location.href = '{{ url_for('user.admin_refund', order_identify=voucher.order_identify) }}';">确认退款</button>

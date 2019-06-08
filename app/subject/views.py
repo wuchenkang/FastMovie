@@ -87,7 +87,7 @@ def buy(id):
         flash("禁止购买自家产品！")
         return redirect(url_for('subject.movie', id=id))
     else:
-        movie = Movie.query.get_or_404(id)
+        voucher = Voucher()
         while True:
             order_identify = ''
             order_identify += chr(random.randint(1, 9) + ord('0'))
@@ -95,7 +95,20 @@ def buy(id):
                 order_identify += chr(random.randint(0, 9) + ord('0'))
             if not Voucher.query.filter(Voucher.order_identify == order_identify).first():
                 break
-        order_identify += 'x' + str(id)
+
+        movie = Movie.query.get_or_404(id)
+        voucher.movie = movie
+        voucher.user = current_user
+        voucher.is_pay = False
+        voucher.multiply_commodities = False
+        voucher.total_money = 0
+        voucher.total_money += movie.price
+        db.session.add(voucher)
+        db.session.commit()
+
+        order_identify += 'x' + str(voucher.id)
+        voucher.order_identify = order_identify
+        db.session.commit()
 
         app_private_key_string = open(r"app/subject/app_private_2048.txt").read()
         alipay_public_key_string = open(r"app/subject/alipay_public_2048.txt").read()
@@ -123,21 +136,13 @@ def buy(id):
 @subject.route('/movie/commodity/result/', methods=['GET'])
 @login_required
 def buy_result():
-    voucher = Voucher()
     out_trade_no = request.args.get('out_trade_no')
     id = int(out_trade_no[out_trade_no.find('x') + 1:])
-    movie = Movie.query.get_or_404(id)
-
-    voucher.movie = movie
-    voucher.user = current_user
-    voucher.order_identify = out_trade_no
+    voucher = Voucher.query.filter(Voucher.id == id).first()
     voucher.is_pay = True
-    voucher.total_money = 0
-    voucher.total_money += movie.price
-    db.session.add(voucher)
     db.session.commit()
 
-    flash("支付成功！花费{}元".format(movie.price))
+    flash("支付成功！花费{}元".format(voucher.total_money))
 
     return render_template('subject/commodity.html', voucher=voucher)
 
