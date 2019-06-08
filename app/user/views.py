@@ -80,10 +80,16 @@ def balance():
 @login_required
 def order():
     page = request.args.get('page', 1, type=int)
-    pagination = Voucher.query.filter(Voucher.user_id == current_user.id).paginate(
-        page, per_page=current_app.config['ITEM_PER_PAGE'],
-        error_out=False
-    )
+    if current_user.is_administrator():
+        pagination = Voucher.query.paginate(
+            page, per_page=current_app.config['ITEM_PER_PAGE'],
+            error_out=False
+        )
+    else:
+        pagination = Voucher.query.filter(Voucher.user_id == current_user.id).paginate(
+            page, per_page=current_app.config['ITEM_PER_PAGE'],
+            error_out=False
+        )
     vouchers = pagination.items
     return render_template("user/order.html", vouchers=vouchers, pagination=pagination)
 
@@ -101,10 +107,45 @@ def refund(order_identify):
     voucher = Voucher.query.filter(Voucher.order_identify == order_identify).first()
     if voucher.is_send:
         flash("商家已发货，无法退款！")
-    elif voucher.is_refund:
-        flash("该订单已经申请退款！")
-    elif not voucher.is_refund:
-        voucher.is_refund = True
+    elif voucher.is_refund == 0:
+        voucher.is_refund = 1
         db.session.commit()
         flash("申请退款成功！")
+    elif voucher.is_refund == 1:
+        flash("该订单已经申请退款！")
+    elif voucher.is_refund == 2:
+        flash("该订单已经退款！")
+    return render_template('subject/commodity.html', voucher=voucher)
+
+
+@user.route('/admin_refund/<string:order_identify>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_refund(order_identify):
+    voucher = Voucher.query.filter(Voucher.order_identify == order_identify).first()
+    if voucher.is_send:
+        flash("您已发货，无法退款！")
+    elif voucher.is_refund == 1:
+        voucher.is_refund = 2
+        db.session.commit()
+        flash("退款成功")
+    elif voucher.is_refund == 0:
+        voucher.is_refund = 2
+        db.session.commit()
+        flash("您已取消该订单，将向相应顾客退款！")
+    elif voucher.is_refund == 2:
+        flash("该订单已退款，无需再退款！")
+
+    return render_template('subject/commodity.html', voucher=voucher)
+
+
+@user.route('/admin_send/<string:order_identify>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_send(order_identify):
+    voucher = Voucher.query.filter(Voucher.order_identify == order_identify).first()
+    if not voucher.is_send and voucher.is_refund == 0:
+        voucher.is_send = True
+        db.session.commit()
+        flash("确认发货！")
     return render_template('subject/commodity.html', voucher=voucher)

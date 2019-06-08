@@ -21,6 +21,9 @@
             <td>收取方式</td>
             <td>电影名称</td>
             <td>电影价格</td>
+            <td>退款状态</td>
+            <td>支付状态</td>
+            <td>发货状态</td>
         </tr>
         {% for voucher in vouchers %}
         <tr>
@@ -39,6 +42,9 @@
                 </a>
             </td>
             <td>{{ voucher.movie.price }}</td>
+            <td>{% if voucher.is_refund == 0 %}无{% elif voucher.is_refund == 1 %}正在退款{% else %}已退款{% endif %}</td>
+            <td>{% if voucher.is_pay %}已支付{% else %}待支付{% endif %}</td>
+            <td>{% if voucher.is_send %}已发货{% else %}待发货{% endif %}</td>
         </tr>
         {% endfor %}
     </table>
