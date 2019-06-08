@@ -27,10 +27,12 @@
                 </script>
             {% endfor %}
         </table>
+        <button class="btn btn-danger" type="button" onclick="submitTrolley('{{ url_for('main.index') }}')">返回</button>
+        <button class="btn btn-primary" type="button" onclick="submitTrolley('{{ url_for('.submit') }}')">购买</button>
         {% if pagination %}
         <div style="text-align: center;">
             <div class="pagination">
-                {{ macros.pagination_widget(pagination, '.manage_movies') }}
+                {{ macros.pagination_widget(pagination, '.view_trolley') }}
             </div>
         </div>
         {% endif %}
