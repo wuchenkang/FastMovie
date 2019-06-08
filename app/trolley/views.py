@@ -32,7 +32,7 @@ def add_trolley(id, name, price):
         new_item.movie_count = 1
         db.session.add(new_item)
     else:
-        old_item = Trolley.query.filter(and_(Trolley.user_id == current_user.id, Trolley.movie_id == id)).first()
+        old_item = Trolley.query.filter(and_(Trolley.user_id == current_user.id, Trolley.movie_id == id, Trolley.inTrolley==True)).first()
         old_item.movie_count += 1
         db.session.add(old_item)
     db.session.commit()
