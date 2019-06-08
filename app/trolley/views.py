@@ -120,6 +120,11 @@ def buy_result():
     voucher.is_pay = True
     db.session.commit()
 
+    tro = Trolley.query.filter(Trolley.user_id==current_user.id).all()
+    for item in tro:
+        db.session.delete(item)
+    db.session.commit()
+
     current_items = []
     ids = list(map(lambda x: int(x), voucher.name.split()))
     for id in ids:

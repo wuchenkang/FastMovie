@@ -5,7 +5,7 @@ function newItem(table, id, name, price, count, modify){
     let movieName = document.createElement("td");
     let moviePrice = document.createElement("td");
     let movieCount = document.createElement("td");
-    let temp = document.createElement("b");
+    let temp = document.createElement("span");
 
     movieID.innerText = id;
     movieName.innerText = name;
@@ -34,8 +34,10 @@ function newItem(table, id, name, price, count, modify){
         subButton.setAttribute("class", "btn btn-default");
         movieCount.insertBefore(subButton, temp);
         movieCount.appendChild(addButton);
+        document.getElementById("total_price-main").innerText = (parseFloat(document.getElementById("total_price-main").innerText) + parseInt(count) * parseFloat(price)).toFixed(2);
+    }else{
+        document.getElementById("total_price-nav").innerText = (parseFloat(document.getElementById("total_price-nav").innerText) + parseInt(count) * parseFloat(price)).toFixed(2);
     }
-
     document.getElementById(table).appendChild(item);
 }
 
@@ -43,6 +45,8 @@ function addCount(ele){
     let item = document.getElementById(ele.parentElement.parentElement.getAttribute("id"));
     item.children[3].children[1].innerText = (parseInt(item.children[3].children[1].innerText) + 1).toString();
     document.getElementById(item.children[3].children[1].getAttribute('id')+"_").innerText = item.children[3].children[1].innerText;
+    document.getElementById("total_price-main").innerText = (parseFloat(document.getElementById("total_price-main").innerText)+parseFloat(item.children[2].innerText)).toFixed(2);
+    document.getElementById("total_price-nav").innerText = (parseFloat(document.getElementById("total_price-nav").innerText)+parseFloat(item.children[2].innerText)).toFixed(2);
 }
 
 function subCount(ele){
@@ -50,6 +54,8 @@ function subCount(ele){
     let item_ = document.getElementById(document.getElementById(item.children[3].children[1].getAttribute('id')+"_").parentElement.parentElement.getAttribute("id"));
     item.children[3].children[1].innerText = (parseInt(item.children[3].children[1].innerText) - 1).toString();
     item_.children[3].children[0].innerText = item.children[3].children[1].innerText;
+    document.getElementById("total_price-main").innerText = (parseFloat(document.getElementById("total_price-main").innerText)-parseFloat(item.children[2].innerText)).toFixed(2);
+    document.getElementById("total_price-nav").innerText = (parseFloat(document.getElementById("total_price-nav").innerText)-parseFloat(item.children[2].innerText)).toFixed(2);
     if(parseInt(item.children[3].innerText) == 0){
         item.parentElement.removeChild(item);
         item_.parentElement.removeChild(item_);

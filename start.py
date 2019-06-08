@@ -11,6 +11,7 @@ app = create_app(os.getenv('CONFIG') or 'default')
 migrate = Migrate(app, db)
 app.add_template_global(get_trolley, 'get_trolley')
 
+
 @app.shell_context_processor
 def make_shell_context():
     """Make shell context"""
