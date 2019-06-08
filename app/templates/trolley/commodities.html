@@ -13,11 +13,11 @@
 </div>
 
 <div class="box" style="text-align: center;">
-    {% for i in range(current_items.size()) %}
+    {% for i in range(len(current_items)) %}
     <div class="row">
         <div class="col-md-4" >
-            {% if item.picture %}
-            <img class="img-rounded" src="data:;base64,{{ base64.b64encode(item.movie.picture).decode('ascii') }}"
+            {% if current_items[i].picture %}
+            <img class="img-rounded" src="data:;base64,{{ base64.b64encode(current_items[i].picture).decode('ascii') }}"
                  width="100%"/>
             {% else %}
             <img class="img-rounded" src="{{ url_for('static', filename='movie.png') }}" width="100%"/>

@@ -21,6 +21,7 @@ def view_trolley():
 
 
 @trolley.route('/add/<int:id>-<string:name>-<float:price>')
+@login_required
 def add_trolley(id, name, price):
     if len(Trolley.query.filter(and_(Trolley.user_id == current_user.id, Trolley.movie_id == id)).all()) == 0:
         new_item = Trolley()
@@ -80,6 +81,7 @@ def submit():
     voucher = Voucher()
     voucher.user = current_user
     voucher.is_pay = False
+    voucher.multiply_commodities = True
     voucher.total_money = money
     voucher.name = movie_ids
     db.session.add(voucher)
@@ -134,4 +136,5 @@ def buy_result():
         db.session.delete(item)
     db.session.commit()
 
-    return render_template('trolley/commodities.html', current_items=current_items, voucher=voucher, movie_count=movie_count)
+    return render_template('trolley/commodities.html', current_items=current_items, voucher=voucher,
+                           movie_count=movie_count, len=len, range=range)

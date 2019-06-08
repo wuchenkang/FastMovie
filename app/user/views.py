@@ -101,11 +101,14 @@ def order_detail(order_identify):
     voucher = Voucher.query.filter(Voucher.order_identify == order_identify).first()
     if voucher.multiply_commodities:
         current_items = []
+        movie_count = []
         ids = list(map(lambda x: int(x), voucher.name.split()))
         for id in ids:
             item = Trolley.query.filter(Trolley.id == id).first()
-            current_items.append(item)
-        return render_template('trolley/commodities.html', current_items=current_items, voucher=voucher)
+            current_items.append(item.movie)
+            movie_count.append(item.movie_count)
+        return render_template('trolley/commodities.html', current_items=current_items, voucher=voucher,
+                               movie_count=movie_count, len=len, range=range)
     else:
         return render_template('subject/commodity.html', voucher=voucher)
 
@@ -126,11 +129,14 @@ def refund(order_identify):
         flash("该订单已经退款！")
     if voucher.multiply_commodities:
         current_items = []
+        movie_count = []
         ids = list(map(lambda x: int(x), voucher.name.split()))
         for id in ids:
             item = Trolley.query.filter(Trolley.id == id).first()
-            current_items.append(item)
-        return render_template('trolley/commodities.html', current_items=current_items, voucher=voucher)
+            current_items.append(item.movie)
+            movie_count.append(item.movie_count)
+        return render_template('trolley/commodities.html', current_items=current_items, voucher=voucher,
+                               movie_count=movie_count, len=len, range=range)
     else:
         return render_template('subject/commodity.html', voucher=voucher)
 
@@ -169,11 +175,14 @@ def admin_refund(order_identify):
             flash("退款失败")
     if voucher.multiply_commodities:
         current_items = []
+        movie_count = []
         ids = list(map(lambda x: int(x), voucher.name.split()))
         for id in ids:
             item = Trolley.query.filter(Trolley.id == id).first()
-            current_items.append(item)
-        return render_template('trolley/commodities.html', current_items=current_items, voucher=voucher)
+            current_items.append(item.movie)
+            movie_count.append(item.movie_count)
+        return render_template('trolley/commodities.html', current_items=current_items, voucher=voucher,
+                               movie_count=movie_count, len=len, range=range)
     else:
         return render_template('subject/commodity.html', voucher=voucher)
 
@@ -189,10 +198,13 @@ def admin_send(order_identify):
         flash("确认发货！")
     if voucher.multiply_commodities:
         current_items = []
+        movie_count = []
         ids = list(map(lambda x: int(x), voucher.name.split()))
         for id in ids:
             item = Trolley.query.filter(Trolley.id == id).first()
-            current_items.append(item)
-        return render_template('trolley/commodities.html', current_items=current_items, voucher=voucher)
+            current_items.append(item.movie)
+            movie_count.append(item.movie_count)
+        return render_template('trolley/commodities.html', current_items=current_items, voucher=voucher,
+                               movie_count=movie_count, len=len, range=range)
     else:
         return render_template('subject/commodity.html', voucher=voucher)
