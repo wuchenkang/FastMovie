@@ -99,9 +99,11 @@ def order_detail(order_identify):
 @login_required
 def refund(order_identify):
     voucher = Voucher.query.filter(Voucher.order_identify == order_identify).first()
-    if voucher.is_refund:
+    if voucher.is_send:
+        flash("商家已发货，无法退款！")
+    elif voucher.is_refund:
         flash("该订单已经申请退款！")
-    else:
+    elif not voucher.is_refund:
         voucher.is_refund = True
         db.session.commit()
         flash("申请退款成功！")
