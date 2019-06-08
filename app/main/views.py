@@ -1,6 +1,7 @@
 import base64
 from flask import render_template, redirect, url_for, request
 from flask_login import current_user
+from sqlalchemy import and_
 from .. import db
 from ..models import Movie, Trolley
 from . import main
@@ -14,9 +15,10 @@ def index():
 
 @main.route('/', methods=['post'])
 def trolley():
-    old_items = Trolley.query.filter(Trolley.user_id==current_user.id).all()
+    old_items = Trolley.query.filter(and_(Trolley.user_id==current_user.id, Trolley.inTrolley==True)).all()
     for item in old_items:
-        db.session.delete(item)
+        item.inTrolley = False
+        db.session.add(item)
     for i in range(len(request.form)):
         new_item = Trolley()
         args = request.form[str(i)].split('|')

@@ -293,3 +293,4 @@ class Trolley(db.Model):
     movie_name = db.Column(db.String)
     movie_price = db.Column(db.Numeric(16, 2))
     movie_count = db.Column(db.Integer, default=0)
+    inTrolley = db.Column(db.Boolean, default=True)

@@ -12,7 +12,7 @@ import random
 @login_required
 def view_trolley():
     page = request.args.get('page', 1, type=int)
-    pagination = Trolley.query.filter(Trolley.user_id == current_user.id).order_by(Trolley.movie_id).paginate(
+    pagination = Trolley.query.filter(and_(Trolley.user_id == current_user.id, Trolley.inTrolley==True)).order_by(Trolley.movie_id).paginate(
         page, per_page=current_app.config['ITEM_PER_PAGE'],
         error_out=False
     )
@@ -23,7 +23,7 @@ def view_trolley():
 @trolley.route('/add/<int:id>-<string:name>-<float:price>')
 @login_required
 def add_trolley(id, name, price):
-    if len(Trolley.query.filter(and_(Trolley.user_id == current_user.id, Trolley.movie_id == id)).all()) == 0:
+    if len(Trolley.query.filter(and_(Trolley.user_id == current_user.id, Trolley.movie_id == id, Trolley.inTrolley==True)).all()) == 0:
         new_item = Trolley()
         new_item.user_id = current_user.id
         new_item.movie_id = id
@@ -42,9 +42,10 @@ def add_trolley(id, name, price):
 @trolley.route('/commodities', methods=['post'])
 @login_required
 def submit():
-    old_items = Trolley.query.filter(Trolley.user_id == current_user.id).all()
+    old_items = Trolley.query.filter(and_(Trolley.user_id == current_user.id, Trolley.inTrolley == True)).all()
     for item in old_items:
-        db.session.delete(item)
+        item.inTrolley = False
+        db.session.add(item)
     for i in range(len(request.form)):
         new_item = Trolley()
         args = request.form[str(i)].split('|')
