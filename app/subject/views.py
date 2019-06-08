@@ -82,30 +82,34 @@ def comment(id):
 @subject.route('/movie/commodity/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def buy(id):
-    movie = Movie.query.get_or_404(id)
-    while True:
-        order_identify = ''
-        order_identify += chr(random.randint(1, 9) + ord('0'))
-        for i in range(17):
-            order_identify += chr(random.randint(0, 9) + ord('0'))
-        if not Voucher.query.filter(Voucher.order_identify == order_identify).first():
-            break
-    order_identify += 'x' + str(id)
-    session['id'] = id
-    session['order_identify'] = order_identify
+    if current_user.is_administrator():
+        flash("禁止购买自家产品！")
+        return redirect(url_for('subject.movie', id=id))
+    else:
+        movie = Movie.query.get_or_404(id)
+        while True:
+            order_identify = ''
+            order_identify += chr(random.randint(1, 9) + ord('0'))
+            for i in range(17):
+                order_identify += chr(random.randint(0, 9) + ord('0'))
+            if not Voucher.query.filter(Voucher.order_identify == order_identify).first():
+                break
+        order_identify += 'x' + str(id)
+        session['id'] = id
+        session['order_identify'] = order_identify
 
-    alipay = ali()
-    # 生成支付的url
-    query_params = alipay.direct_pay(
-        subject=movie.name,  # 商品简单描述
-        out_trade_no=order_identify,  # 商户订单号
-        total_amount=float(movie.price),  # 交易金额(单位: 元 保留俩位小数)
-        panwang="imhehe",
-    )
+        alipay = ali()
+        # 生成支付的url
+        query_params = alipay.direct_pay(
+            subject=movie.name,  # 商品简单描述
+            out_trade_no=order_identify,  # 商户订单号
+            total_amount=float(movie.price),  # 交易金额(单位: 元 保留俩位小数)
+            panwang="imhehe",
+        )
 
-    pay_url = "https://openapi.alipaydev.com/gateway.do?{0}".format(query_params)
+        pay_url = "https://openapi.alipaydev.com/gateway.do?{0}".format(query_params)
 
-    return redirect(pay_url)
+        return redirect(pay_url)
 
 
 @subject.route('/movie/commodity/result/', methods=['GET'])

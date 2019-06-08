@@ -32,7 +32,7 @@
                     {{ voucher.order_identify }}
                 </a>
             </td>
-            <td>{{ voucher.timestamp }}</td>
+            <td>{{ (voucher.timestamp+timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S") }}</td>
             <td>{{ voucher.freight }}</td>
             <td>{{ voucher.payment_method }}</td>
             <td>{{ voucher.receive_method }}</td>
@@ -42,9 +42,28 @@
                 </a>
             </td>
             <td>{{ voucher.movie.price }}</td>
-            <td>{% if voucher.is_refund == 0 %}无{% elif voucher.is_refund == 1 %}正在退款{% else %}已退款{% endif %}</td>
+            <td>
+                {% if voucher.is_refund == 0 %}无{% elif voucher.is_refund == 1 %}正在退款{% else %}已退款{% endif %}
+                {% if current_user.is_administrator() %}
+                    {% if voucher.is_refund == 1 %}
+                        <button class="btn-xs btn-warning" style="margin:0 auto;" onclick="javascript:window.location.href = '{{ url_for('user.admin_refund', order_identify=voucher.order_identify) }}';">确认退款</button>
+                    {% endif %}
+                    {% if voucher.is_refund == 0 %}
+                        <button class="btn-xs btn-danger" style="margin:0 auto;" onclick="javascript:window.location.href = '{{ url_for('user.admin_refund', order_identify=voucher.order_identify) }}';">取消订单</button>
+                    {% endif %}
+                {% else %}
+                    <button class="btn-xs btn-warning" style="margin:0 auto;" onclick="javascript:window.location.href = '{{ url_for('user.refund', order_identify=voucher.order_identify) }}';">申请退款</button>
+                {% endif %}
+            </td>
             <td>{% if voucher.is_pay %}已支付{% else %}待支付{% endif %}</td>
-            <td>{% if voucher.is_send %}已发货{% else %}待发货{% endif %}</td>
+            <td>
+                {% if voucher.is_send %}已发货{% else %}待发货{% endif %}
+                {% if current_user.is_administrator() %}
+                    {% if voucher.is_send == False and voucher.is_refund == 0 %}
+                        <button class="btn-xs btn-success" style="margin:0 auto;" onclick="javascript:window.location.href = '{{ url_for('user.admin_send', order_identify=voucher.order_identify) }}';">确认发货</button>
+                    {% endif %}
+                {% endif %}
+            </td>
         </tr>
         {% endfor %}
     </table>
