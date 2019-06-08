@@ -5,7 +5,8 @@ from .. import db
 from .forms import CreateCommentForm
 from ..models import Movie, User, Comment, Voucher, Rating
 import random
-from .myalipay import *
+# from .myalipay import *
+from alipay import AliPay
 
 
 @subject.route('/movies')
@@ -95,16 +96,23 @@ def buy(id):
             if not Voucher.query.filter(Voucher.order_identify == order_identify).first():
                 break
         order_identify += 'x' + str(id)
-        session['id'] = id
-        session['order_identify'] = order_identify
 
-        alipay = ali()
-        # 生成支付的url
-        query_params = alipay.direct_pay(
-            subject=movie.name,  # 商品简单描述
-            out_trade_no=order_identify,  # 商户订单号
-            total_amount=float(movie.price),  # 交易金额(单位: 元 保留俩位小数)
-            panwang="imhehe",
+        app_private_key_string = open(r"app/subject/app_private_2048.txt").read()
+        alipay_public_key_string = open(r"app/subject/alipay_public_2048.txt").read()
+        myalipay = AliPay(
+            appid="2016093000629449",
+            app_notify_url=None,  # 默认回调url
+            app_private_key_string=app_private_key_string,
+            # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+            alipay_public_key_string=alipay_public_key_string,
+            sign_type="RSA2",  # RSA 或者 RSA2
+            debug = True  # 默认False
+        )
+        query_params = myalipay.api_alipay_trade_page_pay(
+            out_trade_no=order_identify,
+            total_amount=float(movie.price),
+            subject=movie.name,
+            return_url="http://172.26.43.209:8000/subject/movie/commodity/result/"
         )
 
         pay_url = "https://openapi.alipaydev.com/gateway.do?{0}".format(query_params)
@@ -124,6 +132,8 @@ def buy_result():
     voucher.user = current_user
     voucher.order_identify = out_trade_no
     voucher.is_pay = True
+    voucher.total_money = 0
+    voucher.total_money += movie.price
     db.session.add(voucher)
     db.session.commit()
 
@@ -134,7 +144,6 @@ def buy_result():
 
 @subject.route('/movie/commodity/notify/', methods=['POST', 'GET'])
 def buy_notify():
-    alipay = ali()
     # 检测是否支付成功
     # 去请求体中获取所有返回的数据：状态/订单号
     from urllib.parse import parse_qs

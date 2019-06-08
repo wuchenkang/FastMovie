@@ -52,7 +52,9 @@
                         <button class="btn-xs btn-danger" style="margin:0 auto;" onclick="javascript:window.location.href = '{{ url_for('user.admin_refund', order_identify=voucher.order_identify) }}';">取消订单</button>
                     {% endif %}
                 {% else %}
-                    <button class="btn-xs btn-warning" style="margin:0 auto;" onclick="javascript:window.location.href = '{{ url_for('user.refund', order_identify=voucher.order_identify) }}';">申请退款</button>
+                    {% if voucher.is_refund == 0 and voucher.is_send == False %}
+                        <button class="btn-xs btn-warning" style="margin:0 auto;" onclick="javascript:window.location.href = '{{ url_for('user.refund', order_identify=voucher.order_identify) }}';">申请退款</button>
+                    {% endif %}
                 {% endif %}
             </td>
             <td>{% if voucher.is_pay %}已支付{% else %}待支付{% endif %}</td>

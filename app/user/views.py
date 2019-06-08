@@ -6,6 +6,7 @@ from .. import db
 from ..models import Role, User, Voucher
 from ..decorators import admin_required
 import base64
+from alipay import AliPay
 
 
 @user.route('/<username>')
@@ -125,16 +126,31 @@ def admin_refund(order_identify):
     voucher = Voucher.query.filter(Voucher.order_identify == order_identify).first()
     if voucher.is_send:
         flash("您已发货，无法退款！")
-    elif voucher.is_refund == 1:
-        voucher.is_refund = 2
-        db.session.commit()
-        flash("退款成功")
-    elif voucher.is_refund == 0:
-        voucher.is_refund = 2
-        db.session.commit()
-        flash("您已取消该订单，将向相应顾客退款！")
     elif voucher.is_refund == 2:
         flash("该订单已退款，无需再退款！")
+    else:
+        if voucher.is_refund == 0:
+            flash("您已取消该订单，将向相应顾客退款！")
+
+        app_private_key_string = open(r"app/subject/app_private_2048.txt").read()
+        alipay_public_key_string = open(r"app/subject/alipay_public_2048.txt").read()
+        myalipay = AliPay(
+            appid="2016093000629449",
+            app_notify_url=None,  # 默认回调url
+            app_private_key_string=app_private_key_string,
+            # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+            alipay_public_key_string=alipay_public_key_string,
+            sign_type="RSA2",  # RSA 或者 RSA2
+            debug=True  # 默认False
+        )
+
+        result = myalipay.api_alipay_trade_refund(out_trade_no=order_identify, refund_amount=voucher.total_money)
+        if result["code"] == "10000":
+            voucher.is_refund = 2
+            db.session.commit()
+            flash("退款成功")
+        else:
+            flash("退款失败")
 
     return render_template('subject/commodity.html', voucher=voucher)
 

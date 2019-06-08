@@ -264,6 +264,7 @@ class Voucher(db.Model):
     receive_method = db.Column(db.String(64), default="线下收取")
     is_pay = db.Column(db.Boolean, default=False)
     is_send = db.Column(db.Boolean, default=False)
+    total_money = db.Column(db.Float, default=0)
     is_refund = db.Column(db.Integer, default=0)    # 0 表示未申请退款; 1 表示征在申请退款; 2表示已退款
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id', ondelete='CASCADE'))
