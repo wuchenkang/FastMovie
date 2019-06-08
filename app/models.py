@@ -235,6 +235,7 @@ class Movie(db.Model):
         passive_deletes=True
     )
 
+
 login_manager.anonymous_user = AnonymousUser
 
 
@@ -261,6 +262,9 @@ class Voucher(db.Model):
     freight = db.Column(db.Numeric(16, 2), default=0.0)
     payment_method = db.Column(db.String(64), default="在线支付")
     receive_method = db.Column(db.String(64), default="线下收取")
+    is_pay = db.Column(db.Boolean, default=False)
+    is_send = db.Column(db.Boolean, default=False)
+    is_refund = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
     movie_id = db.Column(db.Integer, db.ForeignKey('movies.id', ondelete='CASCADE'))
 
