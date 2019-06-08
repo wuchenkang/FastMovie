@@ -28,8 +28,10 @@ function newItem(table, id, name, price, count, modify){
         let subButton = document.createElement("button");
         addButton.innerText = "+";
         addButton.setAttribute("onclick", "addCount(this)");
+        addButton.setAttribute("class", "btn btn-default");
         subButton.innerText = "-";
         subButton.setAttribute("onclick", "subCount(this)");
+        subButton.setAttribute("class", "btn btn-default");
         movieCount.insertBefore(subButton, temp);
         movieCount.appendChild(addButton);
     }

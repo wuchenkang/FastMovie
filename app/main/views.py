@@ -27,4 +27,4 @@ def trolley():
         new_item.movie_count = int(args[3])
         db.session.add(new_item)
     db.session.commit()
-    return redirect(url_for(main.index))
+    return redirect(url_for('main.index'))
