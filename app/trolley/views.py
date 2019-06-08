@@ -39,7 +39,7 @@ def add_trolley(id, name, price):
     return redirect(url_for('trolley.view_trolley'))
 
 
-@trolley.route('/commodities', methods=['post'])
+@trolley.route('/commodities', methods=['post', 'get'])
 @login_required
 def submit():
     old_items = Trolley.query.filter(and_(Trolley.user_id == current_user.id, Trolley.inTrolley == True)).all()
@@ -72,7 +72,7 @@ def submit():
             db.session.delete(old_items)
     db.session.commit()
 
-    current_items = Trolley.query.filter(Trolley.user_id == current_user.id).all()
+    current_items = Trolley.query.filter(and_(Trolley.user_id == current_user.id, Trolley.inTrolley == True)).all()
     money = 0
     name = ''
     movie_ids = ''
@@ -82,7 +82,6 @@ def submit():
         movie_ids += " " + str(old_items.id)
     name = name.strip()
     movie_ids = movie_ids.strip()
-    # return render_template('trolley/commodities.html', money=money, current_items=current_items)
     while True:
         order_identify = ''
         order_identify += chr(random.randint(1, 9) + ord('0'))
@@ -144,9 +143,9 @@ def buy_result():
         movie_count.append(item.movie_count)
     flash("支付成功！花费{}元".format(voucher.total_money))
 
-    tro = Trolley.query.filter(Trolley.user_id == current_user.id).all()
+    tro = Trolley.query.filter(and_(Trolley.user_id == current_user.id, Trolley.inTrolley)).all()
     for item in tro:
-        db.session.delete(item)
+        item.inTrolley = False
     db.session.commit()
 
     return render_template('trolley/commodities.html', current_items=current_items, voucher=voucher,
