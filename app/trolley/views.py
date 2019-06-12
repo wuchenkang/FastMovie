@@ -73,56 +73,60 @@ def submit():
     db.session.commit()
 
     current_items = Trolley.query.filter(and_(Trolley.user_id == current_user.id, Trolley.inTrolley == True)).all()
-    money = 0
-    name = ''
-    movie_ids = ''
-    for old_items in current_items:
-        money += old_items.movie_price * old_items.movie_count
-        name += " " + old_items.movie.name.strip()
-        movie_ids += " " + str(old_items.id)
-    name = name.strip()
-    movie_ids = movie_ids.strip()
-    while True:
-        order_identify = ''
-        order_identify += chr(random.randint(1, 9) + ord('0'))
-        for i in range(17):
-            order_identify += chr(random.randint(0, 9) + ord('0'))
-        if not Voucher.query.filter(Voucher.order_identify == order_identify).first():
-            break
+    if current_items:
+        money = 0
+        name = ''
+        movie_ids = ''
+        for old_items in current_items:
+            money += old_items.movie_price * old_items.movie_count
+            name += " " + old_items.movie.name.strip()
+            movie_ids += " " + str(old_items.id)
+        name = name.strip()
+        movie_ids = movie_ids.strip()
+        while True:
+            order_identify = ''
+            order_identify += chr(random.randint(1, 9) + ord('0'))
+            for i in range(17):
+                order_identify += chr(random.randint(0, 9) + ord('0'))
+            if not Voucher.query.filter(Voucher.order_identify == order_identify).first():
+                break
 
-    voucher = Voucher()
-    voucher.user = current_user
-    voucher.is_pay = False
-    voucher.multiply_commodities = True
-    voucher.total_money = money
-    voucher.name = movie_ids
-    db.session.add(voucher)
-    db.session.commit()
-    order_identify += 'x' + str(voucher.id)
-    voucher.order_identify = order_identify
-    db.session.commit()
+        voucher = Voucher()
+        voucher.user = current_user
+        voucher.is_pay = False
+        voucher.multiply_commodities = True
+        voucher.total_money = money
+        voucher.name = movie_ids
+        db.session.add(voucher)
+        db.session.commit()
+        order_identify += 'x' + str(voucher.id)
+        voucher.order_identify = order_identify
+        db.session.commit()
 
-    app_private_key_string = open(r"app/subject/app_private_2048.txt").read()
-    alipay_public_key_string = open(r"app/subject/alipay_public_2048.txt").read()
-    myalipay = AliPay(
-        appid="2016093000629449",
-        app_notify_url=None,  # 默认回调url
-        app_private_key_string=app_private_key_string,
-        # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
-        alipay_public_key_string=alipay_public_key_string,
-        sign_type="RSA2",  # RSA 或者 RSA2
-        debug=True  # 默认False
-    )
-    query_params = myalipay.api_alipay_trade_page_pay(
-        out_trade_no=order_identify,
-        total_amount=float(money),
-        subject=name,
-        return_url="http://127.0.0.1:5000/trolley/commodities/result/"
-    )
+        app_private_key_string = open(r"app/subject/app_private_2048.txt").read()
+        alipay_public_key_string = open(r"app/subject/alipay_public_2048.txt").read()
+        myalipay = AliPay(
+            appid="2016093000629449",
+            app_notify_url=None,  # 默认回调url
+            app_private_key_string=app_private_key_string,
+            # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+            alipay_public_key_string=alipay_public_key_string,
+            sign_type="RSA2",  # RSA 或者 RSA2
+            debug=True  # 默认False
+        )
+        query_params = myalipay.api_alipay_trade_page_pay(
+            out_trade_no=order_identify,
+            total_amount=float(money),
+            subject=name,
+            return_url="http://127.0.0.1:5000/trolley/commodities/result/"
+        )
 
-    pay_url = "https://openapi.alipaydev.com/gateway.do?{0}".format(query_params)
+        pay_url = "https://openapi.alipaydev.com/gateway.do?{0}".format(query_params)
 
-    return redirect(pay_url)
+        return redirect(pay_url)
+    else:
+        flash("购物车为空！")
+        return redirect(url_for('trolley.view_trolley'))
 
 
 @trolley.route('/commodities/result/', methods=['GET'])

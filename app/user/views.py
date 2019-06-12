@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from . import user
 from .forms import EditProfileForm, EditProfileAdminForm, CreateMoneyForm
 from .. import db
+from sqlalchemy import and_
 from ..models import Role, User, Voucher, Trolley
 from ..decorators import admin_required
 import base64
@@ -87,7 +88,7 @@ def order():
             error_out=False
         )
     else:
-        pagination = Voucher.query.filter(Voucher.user_id == current_user.id).paginate(
+        pagination = Voucher.query.filter(and_(Voucher.user_id == current_user.id, Voucher.is_pay)).paginate(
             page, per_page=current_app.config['ITEM_PER_PAGE'],
             error_out=False
         )
