@@ -80,6 +80,17 @@ def comment(id):
     return render_template('subject/comment.html', form=form, movie=movie, comments=comments, pagination=pagination)
 
 
+@subject.route('/movie/comdel/<int:id>/', methods=['GET', 'POST'])
+@login_required
+def comdel(id):
+    comment = Comment.query.get_or_404(id)
+    movie = Movie.query.get_or_404(comment.movie_id)
+    db.session.delete(comment)
+    db.session.commit()
+    flash("评论删除成功")
+    return redirect(url_for('subject.movie', id=movie.id))
+
+
 @subject.route('/movie/commodity/<int:id>/', methods=['GET', 'POST'])
 @login_required
 def buy(id):
