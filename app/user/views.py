@@ -83,7 +83,7 @@ def balance():
 def order():
     page = request.args.get('page', 1, type=int)
     if current_user.is_administrator():
-        pagination = Voucher.query.paginate(
+        pagination = Voucher.query.filter(Voucher.is_pay).paginate(
             page, per_page=current_app.config['ITEM_PER_PAGE'],
             error_out=False
         )
